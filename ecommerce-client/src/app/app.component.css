@@ -1,0 +1,54 @@
+.img {
+  width: 70px;
+  height: auto;
+  padding-top: 5px;
+}
+
+.logo {
+  justify-content: center;
+}
+
+.web-name {
+  font-family: "MyFont";
+  color: white;
+  font-size: 40px;
+}
+
+.menu-sidebar-content {
+  margin-top: 150px;
+}
+
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-sidebar {
+  flex: 1;
+  max-width: calc(100% / 5); /* take up 1/5 of the page */
+}
+
+.page-container {
+  flex: 5; /* take up the rest of the page */
+}
+
+@media screen and (max-width: 991px) {
+  .menu-sidebar {
+    display: none;
+  }
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
