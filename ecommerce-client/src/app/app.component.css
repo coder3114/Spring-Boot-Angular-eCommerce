@@ -52,3 +52,13 @@
   opacity: 0.75;
   font-size: 0.75em;
 }
+
+.mat-mdc-button,
+.mat-mdc-button.mat-unthemed {
+  color: rgb(39, 38, 38);
+  font-family: "MyFont";
+}
+
+.menu-sidebar-content {
+  margin-left: 0px;
+}

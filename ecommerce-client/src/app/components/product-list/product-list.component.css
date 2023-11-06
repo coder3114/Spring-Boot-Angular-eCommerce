@@ -1,0 +1,6 @@
+.product-card {
+  width: 300px;
+  margin: 16px;
+  display: inline-block;
+  font-family: "MyFont";
+}

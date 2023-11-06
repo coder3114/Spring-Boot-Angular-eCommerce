@@ -1,5 +1,17 @@
-<p>product-list works!</p>
+<mat-card *ngFor="let tempProduct of products" class="product-card">
+  <img
+    mat-card-image
+    [src]="tempProduct.imageUrl"
+    alt="{{ tempProduct.name }}"
+  />
 
-<p *ngFor="let tempProduct of products">
-  {{ tempProduct.name }}: {{ tempProduct.unitPrice | currency : "GBP" }}
-</p>
+  <mat-card-content>
+    <h2>{{ tempProduct.name }}</h2>
+    <p>{{ tempProduct.unitPrice | currency : "GBP" }}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="primary">Add to Cart</button>
+    <button mat-button color="accent">View Details</button>
+  </mat-card-actions>
+</mat-card>

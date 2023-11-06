@@ -10,31 +10,57 @@
       </a>
     </div>
     <div class="menu-sidebar-content">
-      <nav class="navbar-sidebar">
-        <ul class="list-unstyled navbar-list">
-          <li>
-            <a href="#">Meal Type</a>
-          </li>
-          <li>
-            <a href="#">Cuisine</a>
-          </li>
-          <li>
-            <a href="#">Dietary Preferences</a>
-          </li>
-          <li>
-            <a href="#">Preparation Time</a>
-          </li>
-          <li>
-            <a href="#">Ingredient</a>
-          </li>
-          <li>
-            <a href="#">Price Range</a>
-          </li>
-          <li>
-            <a href="#">Rating</a>
-          </li>
-        </ul>
-      </nav>
+      <!-- <mat-form-field>
+        <mat-label>Meal Types</mat-label>
+        <mat-select [formControl]="mealTypes" multiple>
+          <mat-select-trigger>
+            {{mealTypes.value?.[0] || ''}}
+            <span
+              *ngIf="(mealTypes.value?.length || 0) > 1"
+              class="additional-selection"
+            >
+              (+{{ (mealTypes.value?.length || 0) - 1 }}
+              {{ mealTypes.value?.length === 2 ? "other" : "others" }})
+            </span>
+          </mat-select-trigger>
+          <mat-option
+            *ngFor="let mealType of mealTypeList"
+            [value]="mealType"
+            >{{ mealType }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field> -->
+      <mat-nav-list>
+        <mat-list-item>
+          <button mat-button [matMenuTriggerFor]="mealTypeMenu">
+            Meal Type
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Cuisine</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Dietary Preferences</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Preparation Time</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Ingredient</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Price Range</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button href="#">Rating</a>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <mat-menu #mealTypeMenu="matMenu">
+        <button mat-menu-item>Option 1</button>
+        <button mat-menu-item>Option 2</button>
+        <button mat-menu-item>Option 3</button>
+      </mat-menu>
     </div>
   </aside>
 
@@ -56,7 +82,8 @@
             <div class="cart-area d-n">
               <a href="shopping-detail.html">
                 <div class="total">9.99 <span> 1</span></div>
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <i class="fa fa-shopping-cart fa-shake" aria-hidden="true"></i>
+                <i class="fa fa-duotone fa-user fa-bounce"></i>
               </a>
             </div>
           </div>
