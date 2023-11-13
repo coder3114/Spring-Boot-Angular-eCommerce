@@ -39,7 +39,7 @@ public class Product {
     private boolean active;
 
     @Column(name = "ingredients")
-    private List<String> ingredients;
+    private String ingredients;
 
     @Column(name = "preparation_time")
     private int preparationTime; // The time required to prepare the dish (in minutes)
