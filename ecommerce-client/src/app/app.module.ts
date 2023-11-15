@@ -15,8 +15,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 
 import { MatCardModule } from '@angular/material/card';
+import { SelectMultipleExample } from './components/select-multiple/select-multiple.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [AppComponent, ProductListComponent],
+  providers: [ProductService],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -30,8 +35,8 @@ import { MatCardModule } from '@angular/material/card';
     MatListModule,
     MatButtonModule,
     MatCardModule,
+    SelectMultipleExample,
+    BrowserAnimationsModule,
   ],
-  providers: [ProductService],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

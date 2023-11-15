@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Meal Type</mat-label>
+  <mat-select [formControl]="meals" multiple>
+    @for (meal of mealList; track meal) {
+    <mat-option [value]="meal">{{ meal }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

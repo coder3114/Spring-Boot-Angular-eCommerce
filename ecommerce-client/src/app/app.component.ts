@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
@@ -7,6 +7,9 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class AppComponent {
   title = 'ecommerce-client';
+
+  @ViewChild('dropdown', { static: false }) dropdown?: ElementRef;
+
   mealTypes = new FormControl('');
 
   mealTypeList: string[] = [
