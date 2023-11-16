@@ -1,8 +1,53 @@
 <mat-form-field>
-  <mat-label>Meal Type</mat-label>
+  <mat-label>Meals Type</mat-label>
   <mat-select [formControl]="meals" multiple>
     @for (meal of mealList; track meal) {
     <mat-option [value]="meal">{{ meal }}</mat-option>
     }
   </mat-select>
 </mat-form-field>
+<mat-form-field>
+  <mat-label>Cuisines</mat-label>
+  <mat-select [formControl]="cuisines" multiple>
+    @for (cuisine of cuisineList; track cuisine) {
+    <mat-option [value]="cuisine">{{ cuisine }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Diet Preferences</mat-label>
+  <mat-select [formControl]="dietPrefs" multiple>
+    @for (diaryPreference of dietPrefsList; track diaryPreference) {
+    <mat-option [value]="diaryPreference">{{ diaryPreference }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Ingredients</mat-label>
+  <mat-select [formControl]="ingredients" multiple>
+    @for (ingredient of ingredientsList; track ingredient) {
+    <mat-option [value]="ingredient">{{ ingredient }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Price Range</mat-label>
+  <mat-select [formControl]="priceRanges" multiple>
+    @for (priceRange of priceRangeList; track priceRange) {
+    <mat-option [value]="priceRange">{{ priceRange }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<div class="prep-time">
+  <mat-label>Preparation Time</mat-label>
+  <mat-slider
+    min="0"
+    max="45"
+    step="5"
+    value="1.5"
+    showTickMarks
+    discrete
+    [displayWith]="formatLabel"
+    ><input matSliderThumb
+  /></mat-slider>
+</div>

@@ -1,0 +1,39 @@
+.mat-mdc-form-field {
+  display: flex !important;
+  padding-left: 5%;
+  padding-right: 5%;
+  height: 55px;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  height: 10px;
+}
+
+.prep-time {
+  padding-left: 13%;
+  padding-top: 10px;
+}
+
+.mat-mdc-slider {
+  min-width: 130px !important;
+}
+
+.mat-mdc-slider .mdc-slider__thumb-knob,
+.mdc-slider__track,
+.mdc-slider__track--inactive,
+.mdc-slider__track--active,
+.mdc-slider__track--active_fill {
+  background-color: rgb(39, 165, 98) !important;
+  border-color: rgb(39, 165, 98) !important;
+}
+
+.mdc-slider .mdc-slider__value-indicator {
+  /* transform: initial !important; */
+}
+
+.mdc-slider__value-indicator-container {
+  margin-top: 33px !important;
+  height: 2px !important;
+  position: relative !important;
+  color: black !important;
+}
