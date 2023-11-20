@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ProductService } from './services/product.service';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
@@ -17,7 +18,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { SelectMultipleExample } from './components/select-multiple/select-multiple.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 
+const routes: Routes = [
+  { path: 'products', component: ProductListComponent },
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
+  {
+    path: '**',
+    component: NotFoundComponent,
+  },
+];
 @NgModule({
   declarations: [AppComponent, ProductListComponent],
   providers: [ProductService],
@@ -37,6 +47,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatCardModule,
     SelectMultipleExample,
     BrowserAnimationsModule,
+    RouterModule.forRoot(routes),
   ],
 })
 export class AppModule {}
