@@ -10,38 +10,24 @@
 
 .web-name {
   font-family: "MyFont";
-  color: white;
+  color: white !important;
   font-size: 40px;
 }
 
-.menu-sidebar-content {
-  margin-top: 100px;
+a {
+  text-decoration: none !important;
 }
-
 .example-additional-selection {
   opacity: 0.75;
   font-size: 0.75em;
 }
 
-.page-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.menu-sidebar {
+/* .menu-sidebar {
   flex: 1;
   max-width: calc(100% / 5); /* take up 1/5 of the page */
-}
 
-.page-container {
+/* .page-container {
   flex: 5; /* take up the rest of the page */
-}
-
-@media screen and (max-width: 991px) {
-  .menu-sidebar {
-    display: none;
-  }
-}
 
 .page-container {
   display: flex;

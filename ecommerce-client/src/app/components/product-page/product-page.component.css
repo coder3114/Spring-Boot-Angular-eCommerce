@@ -1,0 +1,35 @@
+.content {
+  color: black !important;
+}
+
+img {
+  padding: 18px;
+}
+
+i {
+  width: 24px;
+  margin-right: 8px;
+}
+
+p,
+mat-card-title,
+mat-card-subtitle,
+button {
+  display: flex;
+  align-items: center;
+}
+
+.cart-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+mat-card {
+  padding-left: 25px;
+}
+
+button {
+  margin-left: 10px;
+}

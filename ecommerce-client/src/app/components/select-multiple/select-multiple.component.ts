@@ -3,6 +3,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
+import * as e from 'cors';
 
 /** @title Select with multiple selection */
 @Component({
@@ -86,4 +87,15 @@ export class SelectMultipleExample {
     '£50 - £100',
     'Over £100',
   ];
+
+  selectedMeals: string[] = [];
+
+  ngOnInit() {
+    this.selectedMeals = new Array<string>();
+  }
+
+  getMealTypes(e: any) {
+    this.selectedMeals = e.value;
+    console.log(`selectedMeal Types are ` + this.selectedMeals);
+  }
 }

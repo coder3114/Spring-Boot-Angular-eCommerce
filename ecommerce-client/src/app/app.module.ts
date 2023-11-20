@@ -16,12 +16,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 
 import { MatCardModule } from '@angular/material/card';
-import { SelectMultipleExample } from './components/select-multiple/select-multiple.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
+import { SideNavComponent } from './components/side-nav/side-nav.component';
+import { ProductPageComponent } from './components/product-page/product-page.component';
 
 const routes: Routes = [
   { path: 'products', component: ProductListComponent },
+  { path: 'products/:id', component: ProductPageComponent },
   { path: '', redirectTo: '/products', pathMatch: 'full' },
   {
     path: '**',
@@ -45,7 +47,7 @@ const routes: Routes = [
     MatListModule,
     MatButtonModule,
     MatCardModule,
-    SelectMultipleExample,
+    SideNavComponent,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
   ],

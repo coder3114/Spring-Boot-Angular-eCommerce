@@ -1,0 +1,62 @@
+<div class="content">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title
+        ><i class="material-icons">restaurant_menu</i
+        ><strong> {{ productDetail.name }}</strong></mat-card-title
+      >
+      <mat-card-subtitle
+        ><i class="material-icons">recommendation</i> Suitable for
+        {{ productDetail.mealType }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <img
+      mat-card-image
+      [src]="productDetail.imageUrl"
+      alt="{{ productDetail.name }}"
+      width="30%"
+    />
+    <mat-card-content>
+      <p>
+        <i class="material-icons">description</i>
+        {{ productDetail.description }}
+      </p>
+      <p>
+        <i class="material-icons">list</i> Ingredients:
+        {{ productDetail.ingredients }}
+      </p>
+      <p>
+        <i class="material-icons">timer</i> Preparation Time:
+        {{ productDetail.preparationTime }} minutes
+      </p>
+      <p>
+        <i class="material-icons">eco</i> Vegan:
+        {{ productDetail.vegan ? "Yes" : "No" }}
+      </p>
+      <p>
+        <i class="material-icons">eco</i> Gluten Free:
+        {{ productDetail.glutenFree ? "Yes" : "No" }}
+      </p>
+      <p>
+        <i class="material-icons">eco</i> Nut Free:
+        {{ productDetail.nutFree ? "Yes" : "No" }}
+      </p>
+      <p>
+        <i class="material-icons">eco</i> Dairy Free:
+        {{ productDetail.dairyFree ? "Yes" : "No" }}
+      </p>
+      <p>
+        <i class="material-icons">eco</i> Vegetarian:
+        {{ productDetail.vegetarian ? "Yes" : "No" }}
+      </p>
+    </mat-card-content>
+    <mat-card-actions class="cart-actions">
+      <button mat-button>
+        <i class="material-icons">shopping_cart</i> ADD TO CART
+      </button>
+      <button mat-button [routerLink]="['/products']">
+        <i class="material-icons">home</i> GO TO HOME PAGE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

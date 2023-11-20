@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,13 +9,9 @@ export class AppComponent {
 
   @ViewChild('dropdown', { static: false }) dropdown?: ElementRef;
 
-  mealTypes = new FormControl('');
-
-  mealTypeList: string[] = [
-    'Breakfast',
-    'Lunch',
-    'Dinner',
-    'Snacks',
-    'Desserts',
-  ];
+  resizingEvent = {
+    isResizing: false,
+    startingCursorX: 0,
+    startingWidth: 0,
+  };
 }

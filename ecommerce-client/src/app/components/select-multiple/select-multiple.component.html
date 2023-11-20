@@ -1,6 +1,10 @@
 <mat-form-field>
   <mat-label>Meals Type</mat-label>
-  <mat-select [formControl]="meals" multiple>
+  <mat-select
+    [formControl]="meals"
+    multiple
+    (selectionChange)="getMealTypes($event)"
+  >
     @for (meal of mealList; track meal) {
     <mat-option [value]="meal">{{ meal }}</mat-option>
     }

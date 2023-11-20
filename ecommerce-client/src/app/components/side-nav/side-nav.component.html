@@ -1,0 +1,20 @@
+<aside class="menu-sidebar d-none d-lg-block">
+  <div class="logo">
+    <a [routerLink]="['/products']">
+      <img
+        src="assets/images/logo.png"
+        alt="healthy-food"
+        class="img img-responsive"
+      />
+    </a>
+  </div>
+  <div class="menu-sidebar-content">
+    <app-select-multiple></app-select-multiple>
+  </div>
+  <div class="resize-handle"></div>
+</aside>
+<div
+  class="resize-handle"
+  [class.resizing]="resizingEvent.isResizing"
+  (mousedown)="startResizing($event)"
+></div>

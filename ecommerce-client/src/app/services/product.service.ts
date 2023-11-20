@@ -8,13 +8,20 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProductService {
-  private baseUrl = 'http://localhost:8080/api/products?size=10';
+  private baseUrl = 'http://localhost:8080/api/products?';
   constructor(private httpClient: HttpClient) {}
 
   getProductList(): Observable<Product[]> {
     return this.httpClient
       .get<GetResponse>(this.baseUrl)
       .pipe(map((response) => response._embedded.products));
+  }
+
+  getProductDetailById(id: number): Observable<any> {
+    console.log('getProductDetailById' + this.baseUrl + '/' + id);
+    return this.httpClient.get<GetResponse>(
+      'http://localhost:8080/api/products/' + id
+    );
   }
 }
 
