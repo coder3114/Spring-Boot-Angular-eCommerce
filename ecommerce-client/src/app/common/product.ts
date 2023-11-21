@@ -14,6 +14,7 @@ export class Product {
     public dairyFree: boolean,
     public nutFree: boolean,
     public vegetarian: boolean,
-    public glutenFree: boolean
+    public glutenFree: boolean,
+    public mealType: string
   ) {}
 }

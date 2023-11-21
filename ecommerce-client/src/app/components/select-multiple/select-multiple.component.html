@@ -2,6 +2,7 @@
   <mat-label>Meals Type</mat-label>
   <mat-select
     [formControl]="meals"
+    [(ngModel)]="selectedMeals"
     multiple
     (selectionChange)="getMealTypes($event)"
   >

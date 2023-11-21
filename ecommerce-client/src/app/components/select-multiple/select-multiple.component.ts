@@ -3,7 +3,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
-import * as e from 'cors';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /** @title Select with multiple selection */
 @Component({
@@ -21,6 +21,19 @@ import * as e from 'cors';
   ],
 })
 export class SelectMultipleExample {
+  selectedMeals: string[] = [];
+  constructor(private router: Router, private activeRoute: ActivatedRoute) {
+    this.activeRoute.queryParams.subscribe((params) => {
+      let mealTypes = params['mealTypes'];
+      // convert to array for multi select
+      if (typeof mealTypes === 'string') {
+        this.selectedMeals = [mealTypes];
+      } else {
+        this.selectedMeals = mealTypes;
+      }
+    });
+  }
+
   formatLabel(value: number): string {
     if (value > 0) {
       return value + ' min';
@@ -77,7 +90,7 @@ export class SelectMultipleExample {
     'Peppers',
     'Garlic',
     'Onions',
-    'Brown Rice', // Added Brown Rice
+    'Brown Rice',
   ];
   priceRanges = new FormControl('');
   priceRangeList: string[] = [
@@ -88,14 +101,10 @@ export class SelectMultipleExample {
     'Over £100',
   ];
 
-  selectedMeals: string[] = [];
-
-  ngOnInit() {
-    this.selectedMeals = new Array<string>();
-  }
-
   getMealTypes(e: any) {
     this.selectedMeals = e.value;
-    console.log(`selectedMeal Types are ` + this.selectedMeals);
+    const queryParams = { mealTypes: this.selectedMeals };
+    const tree = this.router.createUrlTree([], { queryParams });
+    this.router.navigateByUrl(tree);
   }
 }
