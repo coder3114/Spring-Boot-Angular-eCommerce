@@ -11,21 +11,39 @@ import { ProductService } from 'src/app/services/product.service';
 export class ProductListComponent implements OnInit {
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
+  searchMode: boolean = false;
+
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.listProducts();
+    this.route.paramMap.subscribe(() => {
+      this.listProducts();
+    });
   }
 
   listProducts() {
+    // this.searchMode = this.route.snapshot.paramMap.has('keyword');
+    this.route.paramMap.subscribe((param) => {
+      this.searchMode = param.has('keyword');
+    });
+    console.log('searchMode is ' + this.searchMode);
+    if (this.searchMode) {
+      this.handleSearchProducts();
+    }
+    this.handleListProduct();
+  }
+
+  handleListProduct() {
     this.productService.getProductList().subscribe((data) => {
       this.allProducts = data;
       this.filteredProducts = data;
+
       this.route.queryParams.subscribe((params) => {
         let mealTypes = params['mealTypes'];
+        console.log('mealTypes ' + typeof mealTypes);
         if (Object.keys(mealTypes).length != 0) {
           this.filteredProducts = [];
           // call listProducts from here with the new params,
@@ -48,5 +66,20 @@ export class ProductListComponent implements OnInit {
         this.filteredProducts.push(addProduct);
       }
     }
+  }
+
+  handleSearchProducts() {
+    let theKeyword: string = '';
+    console.log(this.route.snapshot.paramMap.get('keyword'));
+    let keyword = this.route.snapshot.paramMap.get('keyword');
+    if (keyword) {
+      theKeyword = keyword;
+    }
+    console.log('the key word is ' + theKeyword);
+    this.productService.searchProducts(theKeyword).subscribe((data) => {
+      this.filteredProducts = data;
+      console.log(this.filteredProducts);
+    });
+    console.log(this.filteredProducts);
   }
 }

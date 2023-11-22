@@ -21,14 +21,12 @@ export class ProductPageComponent implements OnInit {
 
   ngOnInit(): void {
     let productId = this.route.snapshot.params['id'];
-    console.log('calling ' + productId);
     this.getProductDetailById(productId);
   }
 
   getProductDetailById(id: number) {
     this.productService.getProductDetailById(id).subscribe((res) => {
       this.productDetail = res;
-      console.log(res);
     });
   }
 }
