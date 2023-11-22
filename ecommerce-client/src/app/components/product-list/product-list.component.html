@@ -21,3 +21,16 @@
     </button>
   </mat-card-actions>
 </mat-card>
+
+<div
+  *ngIf="filteredProducts?.length == 0"
+  class="alert alert-warning col-md-12"
+  role="alert"
+>
+  <h2 class="text">No Product Found.</h2>
+  <div class="button">
+    <h2>
+      <a class="link" href="http://localhost:4200/products">Go to Home Page</a>
+    </h2>
+  </div>
+</div>

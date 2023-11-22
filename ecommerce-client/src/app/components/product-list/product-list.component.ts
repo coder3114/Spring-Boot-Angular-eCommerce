@@ -32,8 +32,7 @@ export class ProductListComponent implements OnInit {
     console.log('searchMode is ' + this.searchMode);
     if (this.searchMode) {
       this.handleSearchProducts();
-    }
-    this.handleListProduct();
+    } else this.handleListProduct();
   }
 
   handleListProduct() {
@@ -42,16 +41,18 @@ export class ProductListComponent implements OnInit {
       this.filteredProducts = data;
 
       this.route.queryParams.subscribe((params) => {
-        let mealTypes = params['mealTypes'];
-        console.log('mealTypes ' + typeof mealTypes);
-        if (Object.keys(mealTypes).length != 0) {
-          this.filteredProducts = [];
-          // call listProducts from here with the new params,
-          // then by setting this.products to something else it will make the content re - render
-          // or filter products here so don't have to do another sql call
-          this.filterProducts(mealTypes);
-        } else {
-          this.filteredProducts = this.allProducts;
+        if (params['mealTypes'] != null) {
+          let mealTypes = params['mealTypes'];
+          console.log('mealTypes ' + typeof mealTypes);
+          if (Object.keys(mealTypes).length != 0) {
+            this.filteredProducts = [];
+            // call listProducts from here with the new params,
+            // then by setting this.products to something else it will make the content re - render
+            // or filter products here so don't have to do another sql call
+            this.filterProducts(mealTypes);
+          } else {
+            this.filteredProducts = this.allProducts;
+          }
         }
       });
     });
