@@ -32,4 +32,14 @@ public class ProductController {
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED).getBody();
     }
 
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+        try {
+            Product product = productService.getProductById(id);
+            return ResponseEntity.ok(product);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

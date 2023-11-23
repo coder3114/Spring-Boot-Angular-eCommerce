@@ -1,7 +1,9 @@
 package com.enqidev.ecommerce.controller;
 
 import com.enqidev.ecommerce.entity.Product;
+import com.enqidev.ecommerce.repository.ProductRepository;
 import com.enqidev.ecommerce.service.ProductService;
+import com.enqidev.ecommerce.service.ProductServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -61,5 +63,37 @@ public class ProductControllerTest {
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc.perform(MockMvcRequestBuilders.post("/api/products")).andExpect(handler().methodName("createProduct"));
         //verify(controller, times(1)).createProduct(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("should return the product with id and 200 status code")
+    public void testGetProductById() {
+        final ProductService service = mock(ProductService.class);
+        final ProductController controller = new ProductController(service);
+        final Product searchIdProduct = new Product();
+
+        when(service.getProductById(searchIdProduct.getId())).thenReturn(searchIdProduct);
+
+        final ResponseEntity expectedResponse = new ResponseEntity(searchIdProduct, HttpStatus.OK);
+
+        assertEquals(expectedResponse, controller.getProductById(searchIdProduct.getId()));
+    }
+
+    @Test
+    @DisplayName("should throw an exception when product id not found")
+    public void testGetProductByIdThrowsException() {
+        final ProductService service = new ProductServiceImpl(mock(ProductRepository.class));
+        final ProductController controller = new ProductController(service);
+        final ResponseEntity expectedResponse = ResponseEntity.notFound().build();
+
+        assertEquals(expectedResponse, controller.getProductById(null));
+    }
+
+    @Test
+    @DisplayName("should call getProductById() when called post with /api/products/{id}")
+    public void testGetProductByIdPath() throws Exception {
+        final ProductController controller = mock(ProductController.class);
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/1")).andExpect(handler().methodName("getProductById"));
     }
 }
