@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 
 public class ProductControllerTest {
 
@@ -41,4 +42,24 @@ public class ProductControllerTest {
         verify(controller, times(1)).getAllProducts();
     }
 
+    @Test
+    @DisplayName("should return the new product when a product is created")
+    public void testCreateProduct() {
+        final ProductService service = mock(ProductService.class);
+        final ProductController controller = new ProductController(service);
+        final Product saveProduct = new Product();
+
+        when(service.createProduct(saveProduct)).thenReturn(saveProduct);
+
+        assertEquals(saveProduct, controller.createProduct(saveProduct));
+    }
+
+    @Test
+    @DisplayName("should call createProduct() when called post with /api/products")
+    public void testCreateProductPath() throws Exception {
+        final ProductController controller = mock(ProductController.class);
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/products")).andExpect(handler().methodName("createProduct"));
+        //verify(controller, times(1)).createProduct(any(Product.class));
+    }
 }
