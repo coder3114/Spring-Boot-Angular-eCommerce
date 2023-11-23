@@ -21,17 +21,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ProductPageComponent } from './components/product-page/product-page.component';
 import { SearchComponent } from './components/search/search.component';
+import { CartStatusComponent } from './components/cart-status/cart-status.component';
+
+import { AuthModule } from '@auth0/auth0-angular';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'products', pathMatch: 'full' },
   { path: 'search/:keyword', component: ProductListComponent },
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductPageComponent },
+  { path: 'profile', component: ProfileComponent },
   {
     path: '**',
     component: NotFoundComponent,
   },
-
-  { path: '', redirectTo: '/products', pathMatch: 'full' },
 ];
 @NgModule({
   declarations: [AppComponent, ProductListComponent],
@@ -54,6 +59,16 @@ const routes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     SearchComponent,
+    CartStatusComponent,
+    AuthButtonComponent,
+    // Import the module into the application, with configuration
+    AuthModule.forRoot({
+      domain: 'dev-izrt4pljw28bbb8g.us.auth0.com',
+      clientId: '6d8fwF2ry5nxqfZvcAOvHT0HNWHP5m5E',
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+      },
+    }),
   ],
 })
 export class AppModule {}

@@ -1,0 +1,27 @@
+<div class="user-login">
+  <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+    <button
+      class="au-btn-submit"
+      type="submit"
+      (click)="
+        auth.logout({
+          logoutParams: { returnTo: document.location.origin + '/products' }
+        })
+      "
+    >
+      Log out
+    </button>
+  </ng-container>
+
+  <ng-template #loggedOut>
+    <button
+      (click)="auth.loginWithRedirect()"
+      class="au-btn-submit"
+      type="submit"
+    >
+      Log in
+    </button>
+  </ng-template>
+   <a [routerLink]="['/profile']">
+  <i class="fa fa-duotone fa-user pt-3"></i></a>
+</div>
