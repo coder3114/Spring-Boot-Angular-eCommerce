@@ -42,4 +42,13 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<Product>> searchProducts(@PathVariable("keyword") String keyword) {
+        try {
+            return ResponseEntity.ok(productService.searchProducts(keyword));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

@@ -96,4 +96,38 @@ public class ProductControllerTest {
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc.perform(MockMvcRequestBuilders.get("/api/products/1")).andExpect(handler().methodName("getProductById"));
     }
+
+    @Test
+    @DisplayName("should return the products with the search keyword in name/description and 200 status code")
+    public void testGetProductByKeyword() {
+        final ProductService service = mock(ProductService.class);
+        final ProductController controller = new ProductController(service);
+        final List<Product> searchKeywordProduct = new ArrayList<>();
+        final String keyword = "keyword";
+
+        when(service.searchProducts(keyword)).thenReturn(searchKeywordProduct);
+
+        final ResponseEntity expectedResponse = new ResponseEntity(searchKeywordProduct, HttpStatus.OK);
+
+        assertEquals(expectedResponse, controller.searchProducts(keyword));
+    }
+
+    @Test
+    @DisplayName("should throw an exception when no product found for the keyword")
+    public void testGetProductByKeywordThrowsException() {
+        final ProductService service = new ProductServiceImpl(mock(ProductRepository.class));
+        final ProductController controller = new ProductController(service);
+        final ResponseEntity expectedResponse = ResponseEntity.notFound().build();
+
+        assertEquals(expectedResponse, controller.searchProducts(null));
+    }
+
+    @Test
+    @DisplayName("should call getProductById() when called get with /api/search/{keyword}")
+    public void testGetProductByKeywordPath() throws Exception {
+        final ProductController controller = mock(ProductController.class);
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/search/exampleKeyword")).andExpect(handler().methodName("searchProducts"));
+    }
+
 }

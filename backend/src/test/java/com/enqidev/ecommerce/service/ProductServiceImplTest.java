@@ -7,6 +7,7 @@ import com.enqidev.ecommerce.util.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class ProductServiceImplTest {
 
         assertEquals(searchProduct, service.getProductById(searchProduct.getId()));
     }
-    
+
     @Test
     @DisplayName("should throw error if product id not found")
     public void testGetProductByIdNotFound() {
@@ -63,7 +64,34 @@ public class ProductServiceImplTest {
         final Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
             service.getProductById(null);
         });
-        assertEquals("Errorrrr", exception.getMessage());
+        assertEquals("No product found for this id", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("should return the products with the search keyword in name/description")
+    public void testGetProductByKeyword() {
+        final ProductRepository repository = mock(ProductRepository.class);
+        final ProductServiceImpl service = new ProductServiceImpl(repository);
+        final List<Product> searchKeywordProduct = TestUtil.getProductList();
+        final String keyword = "burger";
+
+        when(repository.searchProducts(keyword)).thenReturn(searchKeywordProduct);
+
+        assertEquals(searchKeywordProduct, service.searchProducts(keyword));
+    }
+
+    @Test
+    @DisplayName("should throw error when no product found for the keyword")
+    public void testGetProductByKeywordNotFound() {
+        final ProductRepository repository = mock(ProductRepository.class);
+        final ProductServiceImpl service = new ProductServiceImpl(repository);
+
+        when(repository.searchProducts("exampleKeyword")).thenReturn(Collections.emptyList());
+
+        final Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            service.searchProducts("exampleKeyword");
+        });
+        assertEquals("No product found, please try another keyword.", exception.getMessage());
     }
 
 }

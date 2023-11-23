@@ -34,7 +34,17 @@ public class ProductServiceImpl implements ProductService {
         if (product.isPresent()) {
             return product.get();
         } else {
-            throw new ResourceNotFoundException("Errorrrr");
+            throw new ResourceNotFoundException("No product found for this id");
+        }
+    }
+
+    @Override
+    public List<Product> searchProducts(String query) {
+        List<Product> products = productRepository.searchProducts(query);
+        if (!products.isEmpty()) {
+            return products;
+        } else {
+            throw new ResourceNotFoundException("No product found, please try another keyword.");
         }
     }
 
