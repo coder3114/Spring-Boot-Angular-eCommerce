@@ -8,7 +8,7 @@
       />
     </a>
   </div>
-  <div class="menu-sidebar-content">
+  <div *ngIf="router.url === '/products'" class="menu-sidebar-content">
     <app-select-multiple></app-select-multiple>
   </div>
   <div class="resize-handle"></div>

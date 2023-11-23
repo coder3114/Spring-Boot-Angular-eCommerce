@@ -20,15 +20,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ProductPageComponent } from './components/product-page/product-page.component';
+import { SearchComponent } from './components/search/search.component';
 
 const routes: Routes = [
+  { path: 'search/:keyword', component: ProductListComponent },
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductPageComponent },
-  { path: '', redirectTo: '/products', pathMatch: 'full' },
   {
     path: '**',
     component: NotFoundComponent,
   },
+
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
 ];
 @NgModule({
   declarations: [AppComponent, ProductListComponent],
@@ -50,6 +53,7 @@ const routes: Routes = [
     SideNavComponent,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
+    SearchComponent,
   ],
 })
 export class AppModule {}

@@ -37,8 +37,11 @@ export class ProductListComponent implements OnInit {
 
   handleListProduct() {
     this.productService.getProductList().subscribe((data) => {
+      console.log(data);
       this.allProducts = data;
       this.filteredProducts = data;
+
+      console.log('this.filteredProducts' + this.filteredProducts);
 
       this.route.queryParams.subscribe((params) => {
         if (params['mealTypes'] != null) {

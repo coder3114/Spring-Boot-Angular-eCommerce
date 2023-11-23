@@ -2,7 +2,7 @@ import { Component, HostBinding, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectMultipleExample } from '../select-multiple/select-multiple.component';
 import { SidenavService } from './side-nav.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
@@ -18,7 +18,7 @@ export class SideNavComponent {
     startingWidth: 0,
   };
 
-  constructor(public sidenavService: SidenavService) {}
+  constructor(public sidenavService: SidenavService, public router: Router) {}
 
   @HostBinding('class.resizing')
   get isResizing(): boolean {
