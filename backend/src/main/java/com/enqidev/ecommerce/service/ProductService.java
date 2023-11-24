@@ -11,11 +11,10 @@ public interface ProductService {
 
     Product getProductById(Long id);
 
-    //
     List<Product> searchProducts(String query);
-//
-//    Product updateProduct(Product product);
-//
-//    String deleteProduct(Long id);
+
+    Product updateProduct(Product product);
+
+    String deleteProduct(Long id);
 
 }

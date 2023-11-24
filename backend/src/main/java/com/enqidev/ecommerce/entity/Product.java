@@ -3,14 +3,12 @@ package com.enqidev.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name="product")
+@Table(name = "product")
 @Data
 public class Product {
 
@@ -19,9 +17,9 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private ProductCategory category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id", nullable = false)
+//    private ProductCategory category;
 
     @Column(name = "name")
     private String name;
@@ -63,8 +61,10 @@ public class Product {
     @CreationTimestamp
     private Date dateCreated;
 
-//    @Column(name = "date_updated")
-//    @UpdateTimestamp
-//    private Date lastUpdated;
+    @Column(name = "meal_type")
+    private String mealType;
 
+    public Product(String name) {
+        this.name = name;
+    }
 }

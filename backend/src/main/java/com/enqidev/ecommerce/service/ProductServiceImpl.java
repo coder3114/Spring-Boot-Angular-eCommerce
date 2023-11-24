@@ -3,6 +3,7 @@ package com.enqidev.ecommerce.service;
 import com.enqidev.ecommerce.entity.Product;
 import com.enqidev.ecommerce.exception.ResourceNotFoundException;
 import com.enqidev.ecommerce.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
+    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -48,4 +50,22 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public Product updateProduct(Product product) {
+        Product existingProduct = productRepository.findById(product.getId()).get();
+        existingProduct.setName(product.getName());
+        Product updatedProduct = productRepository.save(existingProduct);
+        return updatedProduct;
+    }
+
+    @Override
+    public String deleteProduct(Long id) {
+        boolean productExist = productRepository.findById(id).isPresent();
+        if (productExist) {
+            productRepository.deleteById(id);
+            return "Deleted product with " + id;
+        } else {
+            throw new ResourceNotFoundException("No product found, cannot delete.");
+        }
+    }
 }
