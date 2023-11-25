@@ -1,5 +1,6 @@
 package com.enqidev.ecommerce.util;
 
+import com.enqidev.ecommerce.entity.Cart;
 import com.enqidev.ecommerce.entity.Product;
 
 import java.util.ArrayList;
@@ -18,5 +19,18 @@ public class TestUtil {
         return productList;
     }
 
+    public static List<Cart> getCartList() {
+        final List<Cart> cartList = new ArrayList<>();
+
+        final String userId = "testUser";
+
+        Cart exampleCart1 = new Cart(getProductList().get(0), userId);
+        Cart exampleCart2 = new Cart(getProductList().get(1), userId);
+
+        cartList.add(exampleCart1);
+        cartList.add(exampleCart2);
+
+        return cartList;
+    }
 
 }

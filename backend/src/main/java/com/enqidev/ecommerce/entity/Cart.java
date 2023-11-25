@@ -18,6 +18,9 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private String userId;
 
+    public Cart() {
+    }
+
     public Cart(Product product, String userId) {
         this.product = product;
         this.userId = userId;

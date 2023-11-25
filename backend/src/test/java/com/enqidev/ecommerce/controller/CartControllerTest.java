@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,8 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CartController.class)
 public class CartControllerTest {
@@ -29,6 +32,9 @@ public class CartControllerTest {
     @MockBean
     private CartService cartService;
 
+    @InjectMocks
+    private CartController cartController;
+
     private Long productId;
     private String userId;
     private Cart mockCart;
@@ -38,7 +44,7 @@ public class CartControllerTest {
     @BeforeEach
     void setUp() {
         this.productId = 1L;
-        this.userId = "testUser";
+        this.userId = "TestUser";
         this.mockCart = new Cart(new Product("TestProduct"), userId);
         this.mockCart1 = new Cart(new Product("TestProduct1"), userId);
         this.cartList = Arrays.asList(mockCart, mockCart1);
@@ -46,11 +52,11 @@ public class CartControllerTest {
 
     @AfterEach
     void tearDown() {
-        Long productId = null;
-        String userId = null;
-        Cart mockCart = null;
-        Cart mockCart1 = null;
-        List<Cart> cartList = null;
+        this.productId = null;
+        this.userId = null;
+        this.mockCart = null;
+        this.mockCart1 = null;
+        this.cartList = null;
     }
 
     @Test
@@ -62,9 +68,55 @@ public class CartControllerTest {
         mockMvc.perform(post("/api/addToCart/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userId))
-                .andExpect(jsonPath("$.product.name").value("TestProduct"));
+                .andExpect(jsonPath("$.product.name").value("TestProduct"))
+                .andExpect(jsonPath("$.userId").value("TestUser"));
 
         verify(cartService, times(1)).addToCart(productId, userId);
+    }
+
+    @Test
+    @DisplayName("Should handle exception and return INTERNAL_SERVER_ERROR")
+    void testAddToCartProductNotFound() throws Exception {
+
+        when(cartService.addToCart(productId, userId)).thenThrow(new RuntimeException());
+
+        mockMvc.perform(post("/api/addToCart/{productId}", productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userId))
+                .andExpect(status().isInternalServerError());
+
+        verify(cartService, times(1)).addToCart(productId, userId);
+    }
+
+    @Test
+    @DisplayName("Should get the user's cart")
+    void testGetCart() throws Exception {
+
+        when(cartService.getCart(userId)).thenReturn(cartList);
+
+        mockMvc.perform(get("/api/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("userId", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].product.name").value("TestProduct"))
+                .andExpect(jsonPath("$[1].product.name").value("TestProduct1"))
+                .andExpect(jsonPath("$[0].userId").value("TestUser"));
+
+        verify(cartService, times(1)).getCart(userId);
+    }
+
+    @Test
+    @DisplayName("Should handle exception and return INTERNAL_SERVER_ERROR")
+    void testGetCartUserNotFound() throws Exception {
+
+        when(cartService.getCart(userId)).thenThrow(new RuntimeException());
+
+        mockMvc.perform(get("/api/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("userId", userId))
+                .andExpect(status().isInternalServerError());
+
+        verify(cartService, times(1)).getCart(userId);
     }
 
 }

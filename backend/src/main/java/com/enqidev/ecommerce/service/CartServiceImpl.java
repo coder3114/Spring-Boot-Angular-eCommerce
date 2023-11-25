@@ -8,14 +8,16 @@ import com.enqidev.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartServiceImpl implements CartService {
-    @Autowired
+
     private CartRepository cartRepository;
 
-    @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
     public CartServiceImpl(ProductRepository productRepository, CartRepository cartRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
@@ -30,5 +32,15 @@ public class CartServiceImpl implements CartService {
         Cart cart = new Cart(product, userId);
         return cartRepository.save(cart);
     }
+
+    @Override
+    public List<Cart> getCart(String userId) {
+        List<Cart> carts = cartRepository.findByUserId(userId);
+        if (carts.isEmpty()) {
+            throw new ResourceNotFoundException("No carts found for user with ID: " + userId);
+        }
+        return carts;
+    }
+
 
 }
