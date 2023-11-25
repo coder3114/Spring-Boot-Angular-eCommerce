@@ -11,16 +11,15 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private String userId;
 
-    public Cart(Product product, User user) {
+    public Cart(Product product, String userId) {
         this.product = product;
-        this.user = user;
+        this.userId = userId;
     }
 }

@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ProductServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.enqidev.ecommerce.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductServiceImpl (com.enqidev.ecommerce.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.4%
+  </span>
+  <span class="absValue">
+    (17/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.enqidev.ecommerce.service;
+&nbsp;
+&nbsp;import com.enqidev.ecommerce.entity.Product;
+&nbsp;import com.enqidev.ecommerce.exception.ResourceNotFoundException;
+&nbsp;import com.enqidev.ecommerce.repository.ProductRepository;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class ProductServiceImpl implements ProductService {
+&nbsp;
+<b class="fc">&nbsp;    private ProductRepository productRepository;</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public ProductServiceImpl(ProductRepository productRepository) {</b>
+<b class="fc">&nbsp;        this.productRepository = productRepository;</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    @Override</b>
+&nbsp;    public List&lt;Product&gt; getAllProducts() {
+<b class="fc">&nbsp;        return productRepository.findAll();</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    @Override</b>
+<b class="fc">&nbsp;    public Product createProduct(Product product) {</b>
+<b class="fc">&nbsp;        productRepository.save(product);</b>
+<b class="fc">&nbsp;        return product;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Product getProductById(Long id) {
+<b class="fc">&nbsp;        final Optional&lt;Product&gt; product = productRepository.findById(id);</b>
+<b class="fc">&nbsp;        if (product.isPresent()) {</b>
+<b class="fc">&nbsp;            return product.get();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new ResourceNotFoundException(&quot;No product found for this id&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Product&gt; searchProducts(String query) {
+<b class="fc">&nbsp;        List&lt;Product&gt; products = productRepository.searchProducts(query);</b>
+<b class="fc">&nbsp;        if (!products.isEmpty()) {</b>
+<b class="fc">&nbsp;            return products;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new ResourceNotFoundException(&quot;No product found, please try another keyword.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Product updateProduct(Product product) {
+&nbsp;        Product existingProduct = productRepository.findById(product.getId()).get();
+&nbsp;        existingProduct.setName(product.getName());
+&nbsp;        Product updatedProduct = productRepository.save(existingProduct);
+&nbsp;        return updatedProduct;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String deleteProduct(Long id) {
+&nbsp;        boolean productExist = productRepository.findById(id).isPresent();
+&nbsp;        if (productExist) {
+&nbsp;            productRepository.deleteById(id);
+&nbsp;            return &quot;Deleted product with &quot; + id;
+&nbsp;        } else {
+&nbsp;            throw new ResourceNotFoundException(&quot;No product found, cannot delete.&quot;);
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-11-23 18:06</div>
+</div>
+</body>
+</html>

@@ -49,7 +49,7 @@ public class ProductControllerTest {
     public void testCreateProduct() {
         final ProductService service = mock(ProductService.class);
         final ProductController controller = new ProductController(service);
-        final Product saveProduct = new Product();
+        final Product saveProduct = new Product("TestProduct");
 
         when(service.createProduct(saveProduct)).thenReturn(saveProduct);
 
@@ -70,7 +70,7 @@ public class ProductControllerTest {
     public void testGetProductById() {
         final ProductService service = mock(ProductService.class);
         final ProductController controller = new ProductController(service);
-        final Product searchIdProduct = new Product();
+        final Product searchIdProduct = new Product("TestProduct");
 
         when(service.getProductById(searchIdProduct.getId())).thenReturn(searchIdProduct);
 
@@ -129,5 +129,4 @@ public class ProductControllerTest {
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc.perform(MockMvcRequestBuilders.get("/api/search/exampleKeyword")).andExpect(handler().methodName("searchProducts"));
     }
-
 }

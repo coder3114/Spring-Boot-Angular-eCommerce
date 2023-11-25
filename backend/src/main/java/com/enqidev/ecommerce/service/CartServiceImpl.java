@@ -2,11 +2,9 @@ package com.enqidev.ecommerce.service;
 
 import com.enqidev.ecommerce.entity.Cart;
 import com.enqidev.ecommerce.entity.Product;
-import com.enqidev.ecommerce.entity.User;
 import com.enqidev.ecommerce.exception.ResourceNotFoundException;
 import com.enqidev.ecommerce.repository.CartRepository;
 import com.enqidev.ecommerce.repository.ProductRepository;
-import com.enqidev.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +16,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public CartServiceImpl(ProductRepository productRepository, UserRepository userRepository, CartRepository cartRepository) {
+    public CartServiceImpl(ProductRepository productRepository, CartRepository cartRepository) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
         this.cartRepository = cartRepository;
     }
 
@@ -32,10 +26,9 @@ public class CartServiceImpl implements CartService {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
-        Cart cart = new Cart(product, user);
+        Cart cart = new Cart(product, userId);
         return cartRepository.save(cart);
     }
+
 }

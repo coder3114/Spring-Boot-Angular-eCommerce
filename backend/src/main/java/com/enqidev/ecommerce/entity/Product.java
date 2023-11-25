@@ -64,6 +64,9 @@ public class Product {
     @Column(name = "meal_type")
     private String mealType;
 
+    public Product() {
+    }
+
     public Product(String name) {
         this.name = name;
     }

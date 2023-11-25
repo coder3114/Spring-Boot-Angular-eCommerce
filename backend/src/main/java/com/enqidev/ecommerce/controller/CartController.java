@@ -2,6 +2,7 @@ package com.enqidev.ecommerce.controller;
 
 
 import com.enqidev.ecommerce.entity.Cart;
+import com.enqidev.ecommerce.exception.ResourceNotFoundException;
 import com.enqidev.ecommerce.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,12 @@ public class CartController {
 
     @PostMapping("/addToCart/{productId}")
     public ResponseEntity<Cart> addToCart(@PathVariable Long productId, @RequestBody String userId) {
-        Cart cart = cartService.addToCart(productId, userId);
-        return ResponseEntity.ok(cart);
+        try {
+            Cart cart = cartService.addToCart(productId, userId);
+            return ResponseEntity.ok(cart);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

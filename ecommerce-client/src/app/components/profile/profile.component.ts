@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.user$.subscribe(
+      //Decoded ID Token
       (profile) => (this.profileJson = JSON.stringify(profile, null, 2))
     );
   }
