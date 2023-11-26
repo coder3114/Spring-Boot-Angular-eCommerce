@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="cart-items-container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Cart details:</h2>
+      </div>
+    </div>
+    <div class="row cart-item" *ngFor="let cartItem of cartItems">
+      <div class="col-md-3">
+        <img [src]="cartItem.imageUrl" alt="Product Image" class="img-fluid" />
+      </div>
+      <div class="col-md-9 item-details">
+        <p>
+          <strong>{{ cartItem.name }}</strong>
+        </p>
+        <p><strong>Quantity:</strong> {{ cartItem.quantity }}</p>
+        <p><strong>Unit Price:</strong> £{{ cartItem.unitPrice }}</p>
+        <p><strong>Total Price:</strong> £{{ cartItem.totalPrice }}</p>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <p>Total to pay: £{{ totalPrice }}</p>
+        <button
+          class="btn btn-primary checkout-button mt-3"
+          (click)="checkout()"
+        >
+          Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
