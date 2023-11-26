@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { Product } from 'src/app/common/product';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-product-list',
@@ -20,7 +21,8 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private route: ActivatedRoute,
-    public auth: AuthService
+    public auth: AuthService,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
@@ -89,16 +91,22 @@ export class ProductListComponent implements OnInit {
       (user) => {
         if (user) {
           const userId = user.sub;
-          console.log('testing ✅');
-          console.log(userId);
-          this.cartService.addToCart(productId, userId).subscribe(
-            (data: any) => {
-              this.cartItems = data;
-            },
-            (error) => {
-              console.error('Error adding to cart:', error);
-            }
-          );
+          if (userId) {
+            console.log('testing ✅');
+            console.log(userId);
+            this.cartService.addToCart(productId, userId).subscribe(
+              (data: any) => {
+                this.cartService.getCart(userId).subscribe((data: any) => {
+                  this.cartItems = data;
+                  console.log(this.cartItems);
+                  this.sharedService.updateCartItems(this.cartItems.length);
+                });
+              },
+              (error) => {
+                console.error('Error adding to cart:', error);
+              }
+            );
+          }
         }
       },
       (error) => {

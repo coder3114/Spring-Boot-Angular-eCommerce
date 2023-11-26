@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Cart } from '../common/cart';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,14 @@ export class CartService {
     );
   }
 
-  getCart() {}
+  getCart(userId: string): Observable<Cart[]> {
+    const params = { userId: userId };
+    console.log('param is ');
+    console.log(params);
+    return this.httpClient.get<Cart[]>('http://localhost:8080/api/cart', {
+      params,
+    });
+  }
 
   removeFromCart() {}
 
