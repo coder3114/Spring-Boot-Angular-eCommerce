@@ -41,37 +41,34 @@ export class ProductListComponent implements OnInit {
     } else this.handleListProduct();
   }
 
-  handleListProduct() {
-    this.productService.getProductList().subscribe((data) => {
-      this.allProducts = data;
-      this.filteredProducts = data;
-
-      this.route.queryParams.subscribe((params) => {
-        if (params['mealTypes'] != null) {
-          let mealTypes = params['mealTypes'];
-          if (Object.keys(mealTypes).length != 0) {
-            this.filteredProducts = [];
-            // call listProducts from here with the new params,
-            // then by setting this.products to something else it will make the content re - render
-            // or filter products here so don't have to do another sql call
-            this.filterProducts(mealTypes);
-          } else {
-            this.filteredProducts = this.allProducts;
-          }
-        }
-      });
-    });
-  }
-
   filterProducts(meal: object) {
+    this.filteredProducts = []; // Reset filteredProducts before applying filters
     for (let mealType of Object.values(meal)) {
       let addedProducts = this.allProducts.filter(
         (product) => product.mealType === mealType
       );
-      for (let addProduct of addedProducts) {
-        this.filteredProducts.push(addProduct);
-      }
+      // use the spread operator (...) to create a new array that merge the two arrays
+      this.filteredProducts = [...this.filteredProducts, ...addedProducts];
     }
+  }
+
+  handleListProduct() {
+    this.productService.getProductList().subscribe((data) => {
+      this.allProducts = data;
+
+      this.route.queryParams.subscribe((params) => {
+        if (params['mealTypes'] != null) {
+          let mealTypes = params['mealTypes'];
+          if (Object.keys(mealTypes).length !== 0) {
+            this.filterProducts(mealTypes);
+          } else {
+            this.filteredProducts = this.allProducts;
+          }
+        } else {
+          this.filteredProducts = this.allProducts;
+        }
+      });
+    });
   }
 
   handleSearchProducts() {
@@ -89,24 +86,22 @@ export class ProductListComponent implements OnInit {
     console.log(`Add to cart: ${productId}`);
     this.auth.user$.subscribe(
       (user) => {
-        if (user) {
+        if (user && user.sub) {
           const userId = user.sub;
-          if (userId) {
-            console.log('testing ✅');
-            console.log(userId);
-            this.cartService.addToCart(productId, userId).subscribe(
-              (data: any) => {
-                this.cartService.getCart(userId).subscribe((data: any) => {
-                  this.cartItems = data;
-                  console.log(this.cartItems);
-                  this.sharedService.updateCartItems(this.cartItems.length);
-                });
-              },
-              (error) => {
-                console.error('Error adding to cart:', error);
-              }
-            );
-          }
+          console.log('testing ✅');
+          console.log(userId);
+          this.cartService.addToCart(productId, userId).subscribe(
+            (data: any) => {
+              this.cartService.getCart(userId).subscribe((data: any) => {
+                this.cartItems = data;
+                console.log(this.cartItems);
+                this.sharedService.updateCartItems(this.cartItems);
+              });
+            },
+            (error) => {
+              console.error('Error adding to cart:', error);
+            }
+          );
         }
       },
       (error) => {

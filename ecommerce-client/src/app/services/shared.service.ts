@@ -2,18 +2,20 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Cart } from '../common/cart';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  private cartItemsSubject: BehaviorSubject<number> =
-    new BehaviorSubject<number>(0);
-  cartItems$: Observable<number> = this.cartItemsSubject.asObservable();
+  private cartItemsSubject: BehaviorSubject<Cart[]> = new BehaviorSubject<
+    Cart[]
+  >([]);
+  cartItems$: Observable<Cart[]> = this.cartItemsSubject.asObservable();
 
-  updateCartItems(count: number): void {
+  updateCartItems(items: Cart[]): void {
     console.log('subscribed✅');
-    console.log(count);
-    this.cartItemsSubject.next(count);
+    console.log(items);
+    this.cartItemsSubject.next(items);
   }
 }
