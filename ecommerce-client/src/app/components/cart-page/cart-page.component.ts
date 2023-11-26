@@ -24,30 +24,7 @@ export class CartPageComponent {
     this.auth.user$.subscribe((user) => {
       if (user && user.sub) {
         const userId = user.sub;
-        this.cartService.getCart(userId).subscribe((data: Cart[]) => {
-          this.cart = data;
-
-          // Group items by product ID
-          const groupedItems = this.groupItemsByProductId();
-
-          // Create CartItem objects directly using map
-          this.cartItems = groupedItems.map((group) => {
-            const firstItem = group[0];
-            return new CartItem(firstItem, group.length);
-          });
-
-          this.totalQuantity = this.cart.length;
-          // the accumulator starts with an initial value of 0
-          // for each cart item, the product's unit price is added to the total
-          this.totalPrice = +this.cart
-            .reduce((total: number, cartItem: Cart) => {
-              return total + cartItem.product.unitPrice;
-            }, 0)
-            .toFixed(2);
-
-          console.log('cart items');
-          console.log(this.cartItems);
-        });
+        this.refreshCart(userId);
       }
     });
   }
@@ -62,6 +39,56 @@ export class CartPageComponent {
       groupedItemsMap.set(productId, group);
     });
     return Array.from(groupedItemsMap.values());
+  }
+
+  refreshCart(userId: string) {
+    this.cartService.getCart(userId).subscribe(
+      (data: Cart[]) => {
+        this.cart = data;
+
+        // Group items by product ID
+        const groupedItems = this.groupItemsByProductId();
+
+        // Create CartItem objects directly using map
+        this.cartItems = groupedItems.map((group) => {
+          const firstItem = group[0];
+          return new CartItem(firstItem, group.length);
+        });
+
+        this.totalQuantity = this.cart.length;
+        // the accumulator starts with an initial value of 0
+        // for each cart item, the product's unit price is added to the total
+        this.totalPrice = +this.cart
+          .reduce((total: number, cartItem: Cart) => {
+            return total + cartItem.product.unitPrice;
+          }, 0)
+          .toFixed(2);
+
+        console.log('cart items');
+        console.log(this.cartItems);
+      },
+      (error) => {
+        console.error('❌ Error refreshing cart:', error);
+      }
+    );
+  }
+
+  removeProduct(productId: number) {
+    this.cartService.removeFromCart(productId).subscribe(
+      () => {
+        console.log('✅ DELETING ', productId);
+        // After successful removal, refresh the cart items
+        this.auth.user$.subscribe((user) => {
+          if (user && user.sub) {
+            const userId = user.sub;
+            this.refreshCart(userId);
+          }
+        });
+      },
+      (error) => {
+        console.error('❌ Error deleting product:', error);
+      }
+    );
   }
 
   checkout() {}

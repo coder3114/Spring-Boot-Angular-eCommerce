@@ -40,4 +40,14 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @DeleteMapping("/cart/{productId}")
+    public ResponseEntity<Void> removeFromCart(@PathVariable Long productId) {
+        try {
+            cartService.removeFromCart(productId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

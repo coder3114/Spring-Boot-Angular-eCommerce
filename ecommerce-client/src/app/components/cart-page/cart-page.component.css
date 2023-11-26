@@ -34,3 +34,9 @@
 .container {
   margin: 10px;
 }
+
+.remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -27,5 +27,11 @@ export class CartService {
     });
   }
 
-  removeFromCart() {}
+  removeFromCart(productId: number) {
+    console.log(`http://localhost:8080/api/cart/${productId}`);
+
+    return this.httpClient.delete(
+      `http://localhost:8080/api/cart/${productId}`
+    );
+  }
 }

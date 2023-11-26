@@ -9,13 +9,21 @@
       <div class="col-md-3">
         <img [src]="cartItem.imageUrl" alt="Product Image" class="img-fluid" />
       </div>
-      <div class="col-md-9 item-details">
+      <div class="col-md-3 item-details">
         <p>
           <strong>{{ cartItem.name }}</strong>
         </p>
         <p><strong>Quantity:</strong> {{ cartItem.quantity }}</p>
         <p><strong>Unit Price:</strong> £{{ cartItem.unitPrice }}</p>
         <p><strong>Total Price:</strong> £{{ cartItem.totalPrice }}</p>
+      </div>
+      <div class="col-md-3 remove">
+        <button
+          class="btn btn-primary checkout-button mt-3"
+          (click)="removeProduct(cartItem.productId)"
+        >
+          Remove
+        </button>
       </div>
     </div>
     <div class="row mt-3">
