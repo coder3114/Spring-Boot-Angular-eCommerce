@@ -1,13 +1,13 @@
 import { Component, HostBinding, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SelectMultipleExample } from '../select-multiple/select-multiple.component';
+import { SelectMultiple } from '../select-multiple/select-multiple.component';
 import { SidenavService } from './side-nav.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [CommonModule, SelectMultipleExample, RouterModule],
+  imports: [CommonModule, SelectMultiple, RouterModule],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.css',
 })

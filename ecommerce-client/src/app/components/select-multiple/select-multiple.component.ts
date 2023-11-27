@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-select-multiple',
   templateUrl: 'select-multiple.component.html',
   styleUrls: ['select-multiple.component.css'],
+  // disable view encapsulation, allow styles to be applied globally
   encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
@@ -20,10 +21,12 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatSliderModule,
   ],
 })
-export class SelectMultipleExample {
+export class SelectMultiple {
   selectedMeals: string[] = [];
   constructor(private router: Router, private activeRoute: ActivatedRoute) {
+    // subscribes to query parameters from the active route
     this.activeRoute.queryParams.subscribe((params) => {
+      // retrieves the 'mealTypes' query parameter
       let mealTypes = params['mealTypes'];
       // convert to array for multi select
       if (typeof mealTypes === 'string') {
@@ -38,9 +41,9 @@ export class SelectMultipleExample {
     if (value > 0) {
       return value + ' min';
     }
-
     return `🚫Lazy`;
   }
+
   meals = new FormControl('');
   mealList: string[] = ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'];
   cuisines = new FormControl('');

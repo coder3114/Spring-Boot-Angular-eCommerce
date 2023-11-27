@@ -1,8 +1,18 @@
 <div class="cart-area">
-  <a (click)="navigateToCartPage()">
+  <a
+    *ngIf="auth.isAuthenticated$ | async; else loggedOutCart"
+    (click)="navigateToCartPage()"
+  >
     <div class="total">
       {{ totalPrice }} <span> {{ totalQuantity }}</span>
     </div>
     <i class="fa fa-shopping-cart fa-shake" aria-hidden="true"></i>
   </a>
+  <ng-template #loggedOutCart>
+    <a (click)="showLoginMessage()">
+      <div class="total">
+        {{ totalPrice }} <span> {{ totalQuantity }}</span>
+      </div>
+      <i class="fa fa-shopping-cart fa-shake" aria-hidden="true"></i> </a
+  ></ng-template>
 </div>

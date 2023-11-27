@@ -37,3 +37,8 @@
   position: relative !important;
   color: black !important;
 }
+
+.custom-slider {
+  font-size: 9px;
+  line-height: 1;
+}

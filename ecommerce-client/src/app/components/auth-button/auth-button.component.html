@@ -22,6 +22,14 @@
       Log in
     </button>
   </ng-template>
-   <a [routerLink]="['/profile']">
-  <i class="fa fa-duotone fa-user pt-3"></i></a>
+  <a
+    *ngIf="auth.isAuthenticated$ | async; else loggedOutUser"
+    [routerLink]="['/profile']"
+  >
+    <i class="fa fa-duotone fa-user pt-3"></i
+  ></a>
+  <ng-template #loggedOutUser>
+    <a (click)="showLoginMessage()">
+      <i class="fa fa-duotone fa-user pt-3"></i></a
+  ></ng-template>
 </div>

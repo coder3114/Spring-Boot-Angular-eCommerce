@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { SharedService } from 'src/app/services/shared.service';
 import { Router } from '@angular/router';
 import { Cart } from 'src/app/common/cart';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cart-status',
@@ -21,7 +22,8 @@ export class CartStatusComponent implements OnDestroy {
     private route: ActivatedRoute,
     public auth: AuthService,
     private sharedService: SharedService,
-    public router: Router
+    public router: Router,
+    private snackBar: MatSnackBar
   ) {
     // Subscribe to cart items changes
     this.subscription = this.sharedService.cartItems$.subscribe((items) => {
@@ -90,9 +92,6 @@ export class CartStatusComponent implements OnDestroy {
             return total + cartItem.product.unitPrice;
           }, 0)
           .toFixed(2);
-
-        console.log('🛒 cart item quantity', this.totalQuantity);
-        console.log('💲 total price', this.totalPrice);
       },
       (error) => {
         console.error('Error getting cart:', error);
@@ -102,6 +101,14 @@ export class CartStatusComponent implements OnDestroy {
 
   navigateToCartPage() {
     this.router.navigate(['/cart']);
+  }
+
+  showLoginMessage(): void {
+    this.snackBar.open('Please log in to view your cart.', 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
 
   ngOnDestroy(): void {

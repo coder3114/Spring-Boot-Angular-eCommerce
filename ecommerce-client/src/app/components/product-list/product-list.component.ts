@@ -5,6 +5,7 @@ import { Product } from 'src/app/common/product';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,8 @@ export class ProductListComponent implements OnInit {
     private cartService: CartService,
     private route: ActivatedRoute,
     public auth: AuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -83,18 +85,14 @@ export class ProductListComponent implements OnInit {
   }
 
   addToCart(productId: number) {
-    console.log(`Add to cart: ${productId}`);
     this.auth.user$.subscribe(
       (user) => {
         if (user && user.sub) {
           const userId = user.sub;
-          console.log('testing ✅');
-          console.log(userId);
           this.cartService.addToCart(productId, userId).subscribe(
             (data: any) => {
               this.cartService.getCart(userId).subscribe((data: any) => {
                 this.cartItems = data;
-                console.log(this.cartItems);
                 this.sharedService.updateCartItems(this.cartItems);
               });
             },
@@ -103,10 +101,22 @@ export class ProductListComponent implements OnInit {
             }
           );
         }
+        if (!user || !user.sub) {
+          this.showLoginMessage();
+          return;
+        }
       },
       (error) => {
         console.error('Error getting user:', error);
       }
     );
+  }
+
+  showLoginMessage(): void {
+    this.snackBar.open('Please log in to add to cart', 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
 }

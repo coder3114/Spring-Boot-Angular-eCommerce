@@ -7,6 +7,7 @@ import { CartItem } from 'src/app/common/cart-item';
 import { HttpClient } from '@angular/common/http';
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { SharedService } from 'src/app/services/shared.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cart-page',
@@ -20,7 +21,8 @@ export class CartPageComponent {
     private cartService: CartService,
     public auth: AuthService,
     private httpClient: HttpClient,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private snackBar: MatSnackBar
   ) {}
 
   cart: Cart[] = [];
@@ -40,7 +42,14 @@ export class CartPageComponent {
     this.loadStripe();
   }
 
-  // Group items by product ID
+  // Group items by product ID in the frontend
+
+  // SELECT product_id, ARRAY_AGG(cart_item) AS grouped_items
+  // The ARRAY_AGG function aggregates rows into an array, grouping them by the product_id.
+  // FROM cart
+  // WHERE user_id = user.sub in frontend
+  // GROUP BY product_id;
+
   groupItemsByProductId(): Cart[][] {
     const groupedItemsMap = new Map<number, Cart[]>();
     this.cart.forEach((cartItem) => {
@@ -74,9 +83,6 @@ export class CartPageComponent {
             return total + cartItem.product.unitPrice;
           }, 0)
           .toFixed(2);
-
-        console.log('cart items');
-        console.log(this.cartItems);
       },
       (error) => {
         console.error('❌ Error refreshing cart:', error);
@@ -87,7 +93,6 @@ export class CartPageComponent {
   removeProduct(productId: number) {
     this.cartService.removeFromCart(productId).subscribe(
       () => {
-        console.log('✅ DELETING ', productId);
         // After successful removal, refresh the cart items
         this.auth.user$.subscribe((user) => {
           if (user && user.sub) {
@@ -112,14 +117,12 @@ export class CartPageComponent {
 
   handleCheckout() {
     if (this.stripe) {
-      console.log(this.totalPrice);
       this.httpClient
         .post('http://localhost:8080/api/payment-intent', {
           amount: this.totalPrice,
           currency: 'gbp',
         })
         .subscribe((session: any) => {
-          console.log('session', session);
           // Redirect to Checkout
           this.stripe!.redirectToCheckout({ sessionId: session.id })
             .then((result: any) => {
@@ -134,5 +137,32 @@ export class CartPageComponent {
     } else {
       console.error('Stripe is not initialized');
     }
+  }
+
+  // need to use webhooks on server side to handle actions after the user returns from the Stripe Checkout page
+  // if checkout.session.completed -> clearing the shopping cart, popup message, or sending confirmation emails
+
+  // Payment successful, clear the shopping cart
+  // this.clearShoppingCart();
+  // this.showPaymentSuccessMessage();
+
+  clearShoppingCart() {
+    this.cart = [];
+    this.cartItems = [];
+    this.totalQuantity = 0;
+    this.totalPrice = 0;
+    this.sharedService.updateCartItems(this.cart);
+  }
+
+  showPaymentSuccessMessage(): void {
+    this.snackBar.open(
+      'You have successfully ordered your healthy meals. Enjoy!',
+      'Close',
+      {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+      }
+    );
   }
 }

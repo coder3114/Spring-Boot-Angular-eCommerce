@@ -1,3 +1,12 @@
 .profileInfo {
   margin: 20px;
 }
+.au-btn-submit {
+  display: flex;
+  align-items: center;
+  height: 45px;
+}
+
+.home-text {
+  margin-left: 15px;
+}
