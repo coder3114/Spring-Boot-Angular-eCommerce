@@ -21,7 +21,7 @@ export class CartStatusComponent implements OnDestroy {
     private route: ActivatedRoute,
     public auth: AuthService,
     private sharedService: SharedService,
-    private router: Router
+    public router: Router
   ) {
     // Subscribe to cart items changes
     this.subscription = this.sharedService.cartItems$.subscribe((items) => {

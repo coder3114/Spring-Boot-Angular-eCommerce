@@ -4,6 +4,9 @@ import { Cart } from 'src/app/common/cart';
 import { CartService } from 'src/app/services/cart.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { CartItem } from 'src/app/common/cart-item';
+import { HttpClient } from '@angular/common/http';
+import { Stripe, loadStripe } from '@stripe/stripe-js';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -13,12 +16,18 @@ import { CartItem } from 'src/app/common/cart-item';
   styleUrl: './cart-page.component.css',
 })
 export class CartPageComponent {
-  constructor(private cartService: CartService, public auth: AuthService) {}
+  constructor(
+    private cartService: CartService,
+    public auth: AuthService,
+    private httpClient: HttpClient,
+    private sharedService: SharedService
+  ) {}
 
   cart: Cart[] = [];
   cartItems: CartItem[] = [];
   totalQuantity: number = 0;
   totalPrice: number = 0;
+  stripe: Stripe | null = null;
 
   ngOnInit(): void {
     this.auth.user$.subscribe((user) => {
@@ -27,6 +36,8 @@ export class CartPageComponent {
         this.refreshCart(userId);
       }
     });
+
+    this.loadStripe();
   }
 
   // Group items by product ID
@@ -45,7 +56,7 @@ export class CartPageComponent {
     this.cartService.getCart(userId).subscribe(
       (data: Cart[]) => {
         this.cart = data;
-
+        this.sharedService.updateCartItems(this.cart);
         // Group items by product ID
         const groupedItems = this.groupItemsByProductId();
 
@@ -91,5 +102,37 @@ export class CartPageComponent {
     );
   }
 
-  checkout() {}
+  loadStripe() {
+    loadStripe(
+      'pk_test_51O72RLBgJydn0KVff08ILsMhps6QF5t2Ju3RXuNAxx23Xcox0rKQFODGZ6afpihh6tTEGHMJZSTRPdB4hoDAArG800CuAsuJor'
+    ).then((stripe) => {
+      this.stripe = stripe;
+    });
+  }
+
+  handleCheckout() {
+    if (this.stripe) {
+      console.log(this.totalPrice);
+      this.httpClient
+        .post('http://localhost:8080/api/payment-intent', {
+          amount: this.totalPrice,
+          currency: 'gbp',
+        })
+        .subscribe((session: any) => {
+          console.log('session', session);
+          // Redirect to Checkout
+          this.stripe!.redirectToCheckout({ sessionId: session.id })
+            .then((result: any) => {
+              if (result.error) {
+                console.error(result.error.message);
+              }
+            })
+            .catch((error: any) => {
+              console.error(error);
+            });
+        });
+    } else {
+      console.error('Stripe is not initialized');
+    }
+  }
 }

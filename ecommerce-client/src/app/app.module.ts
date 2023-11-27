@@ -26,6 +26,7 @@ import { CartStatusComponent } from './components/cart-status/cart-status.compon
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { CartPageComponent } from './components/cart-page/cart-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductPageComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'cart', component: CartPageComponent },
   {
     path: '**',
     component: NotFoundComponent,

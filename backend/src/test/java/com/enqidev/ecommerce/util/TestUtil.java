@@ -2,6 +2,7 @@ package com.enqidev.ecommerce.util;
 
 import com.enqidev.ecommerce.entity.Cart;
 import com.enqidev.ecommerce.entity.Product;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +34,11 @@ public class TestUtil {
         return cartList;
     }
 
+    public static String convertToJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
