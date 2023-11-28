@@ -10,6 +10,6 @@ public interface CartService {
 
     List<Cart> getCart(String userId);
 
-    void removeFromCart(Long productId);
+    Object removeFromCart(Long productId, String userId);
 
 }

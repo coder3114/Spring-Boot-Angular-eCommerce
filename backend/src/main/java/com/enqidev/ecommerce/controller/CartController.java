@@ -1,13 +1,11 @@
 package com.enqidev.ecommerce.controller;
 
 
-import com.enqidev.ecommerce.entity.Cart;
+import com.enqidev.ecommerce.response.ResponseHandler;
 import com.enqidev.ecommerce.service.CartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
@@ -20,34 +18,24 @@ public class CartController {
         this.cartService = cartService;
     }
 
-
     @PostMapping("/addToCart/{productId}")
-    public ResponseEntity<Cart> addToCart(@PathVariable Long productId, @RequestBody String userId) {
-        try {
-            Cart cart = cartService.addToCart(productId, userId);
-            return ResponseEntity.ok(cart);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity addToCart(@PathVariable Long productId, @RequestBody String userId) {
+        return ResponseHandler.responseBuilder("Details about the cart are given here",
+                HttpStatus.OK, cartService.addToCart(productId, userId));
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<List<Cart>> getCart(@RequestParam String userId) {
-        try {
-            List<Cart> cart = cartService.getCart(userId);
-            return ResponseEntity.ok(cart);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Object> getCart(@RequestParam String userId) {
+        return ResponseHandler.responseBuilder("Details about the cart are given here",
+                HttpStatus.OK, cartService.getCart(userId));
     }
 
     @DeleteMapping("/cart/{productId}")
-    public ResponseEntity<Void> removeFromCart(@PathVariable Long productId) {
-        try {
-            cartService.removeFromCart(productId);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity removeFromCart(@PathVariable Long productId, @RequestParam String userId) {
+
+        String responseMessage = "Cart removed successfully. Details: userId is " + userId + " and userId is " + productId;
+
+        return ResponseHandler.responseBuilder(responseMessage,
+                HttpStatus.OK, cartService.removeFromCart(productId, userId));
     }
 }

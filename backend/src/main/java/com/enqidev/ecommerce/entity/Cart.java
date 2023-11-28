@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "cart")
-@Data
+@Data // projectLombok auto generate getter/setter methods
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

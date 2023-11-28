@@ -13,38 +13,45 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService {
 
+    @Autowired
     private CartRepository cartRepository;
 
-    private ProductRepository productRepository;
-
     @Autowired
-    public CartServiceImpl(ProductRepository productRepository, CartRepository cartRepository) {
-        this.productRepository = productRepository;
-        this.cartRepository = cartRepository;
-    }
+    private ProductRepository productRepository;
 
     @Override
     public Cart addToCart(Long productId, String userId) {
 
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 
         Cart cart = new Cart(product, userId);
+
         return cartRepository.save(cart);
     }
 
     @Override
     public List<Cart> getCart(String userId) {
+
         List<Cart> carts = cartRepository.findByUserId(userId);
+
         if (carts.isEmpty()) {
-            throw new ResourceNotFoundException("No carts found for user with ID: " + userId);
+            throw new ResourceNotFoundException("No carts found for user with ID " + userId);
         }
+
         return carts;
     }
 
     @Override
-    public void removeFromCart(Long productId) {
-        cartRepository.deleteByProductId(productId);
+    public Object removeFromCart(Long productId, String userId) {
+        // returns the number of entities (rows) deleted by the query
+        int deletedCount = cartRepository.deleteByProductIdAndUserId(productId, userId);
+
+        if (deletedCount == 0) {
+            throw new ResourceNotFoundException("No carts found for product with id: " + productId + " and user with id: " + userId);
+        }
+
+        return null;
     }
 
 }
