@@ -8,18 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("http://localhost:4200")
-@RestController
+@RestController // @Controller and @ResponseBody
 @RequestMapping("/api")
 public class CartController {
 
-    private CartService cartService;
+    private final CartService cartService;
 
     public CartController(CartService cartService) {
         this.cartService = cartService;
-    }
+    } // constructor injection, dependency injection
 
     @PostMapping("/addToCart/{productId}")
-    public ResponseEntity addToCart(@PathVariable Long productId, @RequestBody String userId) {
+    public ResponseEntity<Object> addToCart(@PathVariable Long productId, @RequestBody String userId) {
         return ResponseHandler.responseBuilder("Details about the cart are given here",
                 HttpStatus.OK, cartService.addToCart(productId, userId));
     }
@@ -31,7 +31,7 @@ public class CartController {
     }
 
     @DeleteMapping("/cart/{productId}")
-    public ResponseEntity removeFromCart(@PathVariable Long productId, @RequestParam String userId) {
+    public ResponseEntity<Object> removeFromCart(@PathVariable Long productId, @RequestParam String userId) {
 
         String responseMessage = "Cart removed successfully. Details: userId is " + userId + " and userId is " + productId;
 

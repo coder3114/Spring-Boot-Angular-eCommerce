@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 import { Cart } from '../common/cart';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root', // this tells Angular to provide the service in the root injector.
 })
 export class CartService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {} // inject HttpClient service into the CartService class
 
   private baseUrl = 'http://localhost:8080/api';
 
@@ -20,18 +20,15 @@ export class CartService {
 
   getCart(userId: string): Observable<Cart[]> {
     const params = { userId: userId };
-    console.log('param is ');
-    console.log(params);
-    return this.httpClient.get<Cart[]>('http://localhost:8080/api/cart', {
+    return this.httpClient.get<Cart[]>(`${this.baseUrl}/cart`, {
       params,
     });
   }
 
-  removeFromCart(productId: number) {
-    console.log(`http://localhost:8080/api/cart/${productId}`);
-
-    return this.httpClient.delete(
-      `http://localhost:8080/api/cart/${productId}`
-    );
+  removeFromCart(productId: number, userId: string) {
+    const params = { userId: userId };
+    return this.httpClient.delete(`${this.baseUrl}/cart/${productId}`, {
+      params,
+    });
   }
 }

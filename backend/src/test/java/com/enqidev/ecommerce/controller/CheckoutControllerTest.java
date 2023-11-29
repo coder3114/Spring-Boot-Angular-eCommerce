@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CheckoutController.class)
 public class CheckoutControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -27,7 +28,7 @@ public class CheckoutControllerTest {
     @Test
     void testCreatePaymentIntent() throws Exception {
 
-        PaymentInfo paymentInfo = new PaymentInfo();
+        PaymentInfo paymentInfo = new PaymentInfo("gbp", 100.0);
         paymentInfo.setAmount(100);
         paymentInfo.setCurrency("gbp");
 
@@ -37,7 +38,7 @@ public class CheckoutControllerTest {
         when(checkoutService.createPaymentSession(any(PaymentInfo.class)))
                 .thenReturn(mockSession);
 
-        mockMvc.perform(post("/api/payment-intent")
+        mockMvc.perform(post("/api/checkout")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtil.convertToJsonString(paymentInfo)))
                 .andExpect(status().isOk())

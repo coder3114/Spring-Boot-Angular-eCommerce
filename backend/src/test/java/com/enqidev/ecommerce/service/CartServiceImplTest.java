@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+// tells JUnit 5 to use the Mockito extension for test execution so @InjectMocks @Mock works as expected
 public class CartServiceImplTest {
     @Mock
     private ProductRepository productRepository;
@@ -34,9 +35,9 @@ public class CartServiceImplTest {
     private CartServiceImpl cartService;
 
     Long productId = 1L;
-    String userId = "testUser";
-    Product mockProduct = new Product("TestProduct");
-    Cart mockCart = new Cart(mockProduct, userId);
+    String userId = "TestUser";
+    Product mockProduct = TestUtil.getProductList().get(1);
+    Cart mockCart = TestUtil.getCartList().get(1);
 
     @Test
     @DisplayName("Should add the product to the cart when calling addToCart API")
@@ -64,14 +65,13 @@ public class CartServiceImplTest {
             cartService.addToCart(productId, userId);
         });
 
-        assertEquals("Product not found.", exception.getMessage());
+        assertEquals("Product not found with id: " + productId, exception.getMessage());
     }
-
 
     @Test
     @DisplayName("Should get the user's cart")
     void testGetCart() {
-        final String userId = "testUser";
+        final String userId = "TestUser";
         final List<Cart> mockCartList = TestUtil.getCartList();
 
         when(cartRepository.findByUserId(userId)).thenReturn(mockCartList);
@@ -81,7 +81,6 @@ public class CartServiceImplTest {
         verify(cartRepository, times(1)).findByUserId(userId);
 
         assertEquals(mockCartList, result);
-
     }
 
     @Test
@@ -94,7 +93,37 @@ public class CartServiceImplTest {
             cartService.getCart(userId);
         });
 
-        assertEquals("No carts found for user with ID: " + userId, exception.getMessage());
+        assertEquals("No carts found for user with id: " + userId, exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Should remove the product from the cart")
+    void testRemoveFromCart() {
+
+        when(cartRepository.deleteByProductIdAndUserId(productId, userId)).thenReturn(1);
+
+        Object result = cartService.removeFromCart(productId, userId);
+
+        verify(cartRepository, times(1)).deleteByProductIdAndUserId(productId, userId);
+
+        assertEquals(null, result);
+    }
+
+    @Test
+    @DisplayName("Should throw ResourceNotFoundException when trying to remove a non-existing product from the cart")
+    void testRemoveFromCartProductNotFound() {
+
+        when(cartRepository.deleteByProductIdAndUserId(productId, userId)).thenReturn(0);
+
+        // Call the service and expect an exception
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            cartService.removeFromCart(productId, userId);
+        });
+
+        verify(cartRepository, times(1)).deleteByProductIdAndUserId(productId, userId);
+
+        String expectedMessage = "No carts found for product with id: " + productId + " and user with id: " + userId;
+        String actualMessage = exception.getMessage();
+        assert (actualMessage.contains(expectedMessage));
+    }
 }

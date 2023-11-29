@@ -18,7 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CartPageComponent {
   constructor(
-    private cartService: CartService,
+    private cartService: CartService, // inject the CartService, to access cart data
     public auth: AuthService,
     private httpClient: HttpClient,
     private sharedService: SharedService,
@@ -63,8 +63,8 @@ export class CartPageComponent {
 
   refreshCart(userId: string) {
     this.cartService.getCart(userId).subscribe(
-      (data: Cart[]) => {
-        this.cart = data;
+      (data: any) => {
+        this.cart = data.data;
         this.sharedService.updateCartItems(this.cart);
         // Group items by product ID
         const groupedItems = this.groupItemsByProductId();
@@ -91,20 +91,20 @@ export class CartPageComponent {
   }
 
   removeProduct(productId: number) {
-    this.cartService.removeFromCart(productId).subscribe(
-      () => {
-        // After successful removal, refresh the cart items
-        this.auth.user$.subscribe((user) => {
-          if (user && user.sub) {
-            const userId = user.sub;
+    this.auth.user$.subscribe((user) => {
+      if (user && user.sub) {
+        const userId = user.sub;
+        this.cartService.removeFromCart(productId, userId).subscribe(
+          () => {
+            // After successful removal, refresh the cart items
             this.refreshCart(userId);
+          },
+          (error) => {
+            console.error('❌ Error deleting product:', error);
           }
-        });
-      },
-      (error) => {
-        console.error('❌ Error deleting product:', error);
+        );
       }
-    );
+    });
   }
 
   loadStripe() {
@@ -118,7 +118,7 @@ export class CartPageComponent {
   handleCheckout() {
     if (this.stripe) {
       this.httpClient
-        .post('http://localhost:8080/api/payment-intent', {
+        .post('http://localhost:8080/api/checkout', {
           amount: this.totalPrice,
           currency: 'gbp',
         })

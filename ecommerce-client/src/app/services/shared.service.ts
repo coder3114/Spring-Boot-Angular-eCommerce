@@ -14,8 +14,6 @@ export class SharedService {
   cartItems$: Observable<Cart[]> = this.cartItemsSubject.asObservable();
 
   updateCartItems(items: Cart[]): void {
-    console.log('subscribed✅');
-    console.log(items);
     this.cartItemsSubject.next(items);
   }
 }

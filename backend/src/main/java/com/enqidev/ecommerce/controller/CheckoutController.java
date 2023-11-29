@@ -20,7 +20,7 @@ public class CheckoutController {
         this.checkoutService = checkoutService;
     }
 
-    @PostMapping(value = "/payment-intent", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/checkout", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createPaymentSession(@RequestBody PaymentInfo paymentInfo) throws StripeException {
 
         Session sessionInfo = checkoutService.createPaymentSession(paymentInfo);

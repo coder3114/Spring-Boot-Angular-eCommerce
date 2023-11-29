@@ -21,10 +21,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ProductControllerTest {
 
+    final ProductService service = mock(ProductService.class);
+
+    final ProductController controller = mock(ProductController.class);
+
+    final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
     @Test
     @DisplayName("should return list of all products with 200 status code")
     public void testGetAllProducts() {
-        final ProductService service = mock(ProductService.class);
+
         final ProductController controller = new ProductController(service);
         final List<Product> productList = new ArrayList<>();
 
@@ -38,16 +44,16 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should call getAllProducts() when called with /api/products")
     public void testGetAllProductsPath() throws Exception {
-        final ProductController controller = mock(ProductController.class);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/products"));
+
         verify(controller, times(1)).getAllProducts();
     }
 
     @Test
     @DisplayName("should return the new product when a product is created")
     public void testCreateProduct() {
-        final ProductService service = mock(ProductService.class);
+
         final ProductController controller = new ProductController(service);
         final Product saveProduct = new Product("TestProduct");
 
@@ -59,16 +65,14 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should call createProduct() when called post with /api/products")
     public void testCreateProductPath() throws Exception {
-        final ProductController controller = mock(ProductController.class);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/products")).andExpect(handler().methodName("createProduct"));
-        //verify(controller, times(1)).createProduct(any(Product.class));
     }
 
     @Test
     @DisplayName("should return the product with id and 200 status code")
     public void testGetProductById() {
-        final ProductService service = mock(ProductService.class);
+
         final ProductController controller = new ProductController(service);
         final Product searchIdProduct = new Product("TestProduct");
 
@@ -82,8 +86,10 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should throw an exception when product id not found")
     public void testGetProductByIdThrowsException() {
+
         final ProductService service = new ProductServiceImpl(mock(ProductRepository.class));
         final ProductController controller = new ProductController(service);
+
         final ResponseEntity expectedResponse = ResponseEntity.notFound().build();
 
         assertEquals(expectedResponse, controller.getProductById(null));
@@ -92,15 +98,14 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should call getProductById() when called post with /api/products/{id}")
     public void testGetProductByIdPath() throws Exception {
-        final ProductController controller = mock(ProductController.class);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/products/1")).andExpect(handler().methodName("getProductById"));
     }
 
     @Test
     @DisplayName("should return the products with the search keyword in name/description and 200 status code")
     public void testGetProductByKeyword() {
-        final ProductService service = mock(ProductService.class);
+
         final ProductController controller = new ProductController(service);
         final List<Product> searchKeywordProduct = new ArrayList<>();
         final String keyword = "keyword";
@@ -115,8 +120,10 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should throw an exception when no product found for the keyword")
     public void testGetProductByKeywordThrowsException() {
+
         final ProductService service = new ProductServiceImpl(mock(ProductRepository.class));
         final ProductController controller = new ProductController(service);
+
         final ResponseEntity expectedResponse = ResponseEntity.notFound().build();
 
         assertEquals(expectedResponse, controller.searchProducts(null));
@@ -125,8 +132,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("should call getProductById() when called get with /api/search/{keyword}")
     public void testGetProductByKeywordPath() throws Exception {
-        final ProductController controller = mock(ProductController.class);
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/search/exampleKeyword")).andExpect(handler().methodName("searchProducts"));
     }
 }

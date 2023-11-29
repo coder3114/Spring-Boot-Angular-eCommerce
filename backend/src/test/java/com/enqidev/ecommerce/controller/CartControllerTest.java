@@ -1,8 +1,9 @@
 package com.enqidev.ecommerce.controller;
 
 import com.enqidev.ecommerce.entity.Cart;
-import com.enqidev.ecommerce.entity.Product;
+import com.enqidev.ecommerce.exception.ResourceNotFoundException;
 import com.enqidev.ecommerce.service.CartService;
+import com.enqidev.ecommerce.util.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,12 +15,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CartControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; // simulates HTTP requests and responses without a running server
 
     @MockBean
     private CartService cartService;
@@ -45,9 +44,9 @@ public class CartControllerTest {
     void setUp() {
         this.productId = 1L;
         this.userId = "TestUser";
-        this.mockCart = new Cart(new Product("TestProduct"), userId);
-        this.mockCart1 = new Cart(new Product("TestProduct1"), userId);
-        this.cartList = Arrays.asList(mockCart, mockCart1);
+        this.mockCart = TestUtil.getCartList().get(0);
+        this.mockCart1 = TestUtil.getCartList().get(1);
+        this.cartList = TestUtil.getCartList();
     }
 
     @AfterEach
@@ -68,8 +67,10 @@ public class CartControllerTest {
         mockMvc.perform(post("/api/addToCart/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userId))
-                .andExpect(jsonPath("$.product.name").value("TestProduct"))
-                .andExpect(jsonPath("$.userId").value("TestUser"));
+                .andExpect(jsonPath("$.data.product.name").value("TestProduct")) // $ symbol represents the root of the JSON document
+                .andExpect(jsonPath("$.data.userId").value("TestUser"))
+                .andExpect(jsonPath("message").value("Details about the cart are given here"))
+                .andExpect(status().isOk());
 
         verify(cartService, times(1)).addToCart(productId, userId);
     }
@@ -78,12 +79,13 @@ public class CartControllerTest {
     @DisplayName("Should handle exception and return INTERNAL_SERVER_ERROR")
     void testAddToCartProductNotFound() throws Exception {
 
-        when(cartService.addToCart(productId, userId)).thenThrow(new RuntimeException());
+        when(cartService.addToCart(productId, userId)).thenThrow(new ResourceNotFoundException("Cannot add to cart."));
 
         mockMvc.perform(post("/api/addToCart/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userId))
-                .andExpect(status().isInternalServerError());
+                .andExpect(jsonPath("message").value("Cannot add to cart."))
+                .andExpect(status().isNotFound());
 
         verify(cartService, times(1)).addToCart(productId, userId);
     }
@@ -98,25 +100,56 @@ public class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("userId", userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].product.name").value("TestProduct"))
-                .andExpect(jsonPath("$[1].product.name").value("TestProduct1"))
-                .andExpect(jsonPath("$[0].userId").value("TestUser"));
+                .andExpect(jsonPath("$.data[0].product.name").value("TestProduct"))
+                .andExpect(jsonPath("$.data[1].product.name").value("TestProduct1"))
+                .andExpect(jsonPath("$.data[0].userId").value("TestUser"))
+                .andExpect(jsonPath("message").value("Details about the cart are given here"))
+                .andExpect(status().isOk());
 
         verify(cartService, times(1)).getCart(userId);
     }
 
     @Test
-    @DisplayName("Should handle exception and return INTERNAL_SERVER_ERROR")
+    @DisplayName("Should handle exception if cannot find the cart for the user")
     void testGetCartUserNotFound() throws Exception {
 
-        when(cartService.getCart(userId)).thenThrow(new RuntimeException());
+        when(cartService.getCart(userId)).thenThrow(new ResourceNotFoundException("No carts found."));
 
         mockMvc.perform(get("/api/cart")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("userId", userId))
-                .andExpect(status().isInternalServerError());
+                .andExpect(jsonPath("message").value("No carts found."))
+                .andExpect(status().isNotFound());
 
         verify(cartService, times(1)).getCart(userId);
+    }
+
+    @Test
+    @DisplayName("Should remove the product from the cart")
+    void testRemoveFromCart() throws Exception {
+        when(cartService.removeFromCart(productId, userId)).thenReturn(null);
+
+        mockMvc.perform(delete("/api/cart/{productId}", productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("userId", userId))
+                .andExpect(jsonPath("message").value("Cart removed successfully. Details: userId is " + userId + " and userId is " + productId))
+                .andExpect(status().isOk());
+
+        verify(cartService, times(1)).removeFromCart(productId, userId);
+    }
+
+    @Test
+    @DisplayName("Should handle exception and return INTERNAL_SERVER_ERROR")
+    void testRemoveFromCartProductNotFound() throws Exception {
+        when(cartService.removeFromCart(productId, userId)).thenThrow(new ResourceNotFoundException("Cannot remove from cart."));
+
+        mockMvc.perform(delete("/api/cart/{productId}", productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("userId", userId))
+                .andExpect(jsonPath("message").value("Cannot remove from cart."))
+                .andExpect(status().isNotFound());
+
+        verify(cartService, times(1)).removeFromCart(productId, userId);
     }
 
 }

@@ -28,13 +28,10 @@ export class ProductListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(() => {
-      this.listProducts();
-    });
+    this.listProducts();
   }
 
   listProducts() {
-    // this.searchMode = this.route.snapshot.paramMap.has('keyword');
     this.route.paramMap.subscribe((param) => {
       this.searchMode = param.has('keyword');
     });
@@ -92,7 +89,7 @@ export class ProductListComponent implements OnInit {
           this.cartService.addToCart(productId, userId).subscribe(
             (data: any) => {
               this.cartService.getCart(userId).subscribe((data: any) => {
-                this.cartItems = data;
+                this.cartItems = data.data;
                 this.sharedService.updateCartItems(this.cartItems);
               });
             },

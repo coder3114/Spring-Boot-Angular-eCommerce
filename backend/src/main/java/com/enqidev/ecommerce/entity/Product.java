@@ -17,10 +17,6 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id", nullable = false)
-//    private ProductCategory category;
-
     @Column(name = "name")
     private String name;
 
@@ -68,6 +64,11 @@ public class Product {
     }
 
     public Product(String name) {
+        this.name = name;
+    }
+
+    public Product(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 }

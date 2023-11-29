@@ -11,8 +11,8 @@ public class TestUtil {
 
     public static List<Product> getProductList() {
         final List<Product> productList = new ArrayList<>();
-        final Product exampleProduct1 = new Product("TestProduct");
-        final Product exampleProduct2 = new Product("TestProduct");
+        final Product exampleProduct1 = new Product(1L, "TestProduct");
+        final Product exampleProduct2 = new Product(2L, "TestProduct1");
 
         productList.add(exampleProduct1);
         productList.add(exampleProduct2);
@@ -23,7 +23,7 @@ public class TestUtil {
     public static List<Cart> getCartList() {
         final List<Cart> cartList = new ArrayList<>();
 
-        final String userId = "testUser";
+        final String userId = "TestUser";
 
         Cart exampleCart1 = new Cart(getProductList().get(0), userId);
         Cart exampleCart2 = new Cart(getProductList().get(1), userId);

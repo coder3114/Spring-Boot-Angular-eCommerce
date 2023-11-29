@@ -13,21 +13,11 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     List<Cart> findByUserId(String userId);
 
-    @Modifying
     // ensures the delete operation is atomic. If an exception occurs during the delete operation,
     // the transaction is rolled back, and the database remains in a consistent state
     @Transactional
-    @Query("DELETE FROM Cart c WHERE c.product.id = :productId")
-    void deleteByProductId(Long productId);
-
-    List<Cart> findByProductIdAndUserId(Long productId, String userId);
-
-    // ensures the delete operation is atomic. If an exception occurs during the delete operation,
-    // the transaction is rolled back, and the database remains in a consistent state
-    @Transactional
-    @Modifying
+    @Modifying // update or delete operation
     @Query("DELETE FROM Cart c WHERE c.product.id = :productId and c.userId = :userId")
+    // custom JPQL (Java Persistence Query Language) query
     int deleteByProductIdAndUserId(@Param("productId") Long productId, @Param("userId") String userId);
-
-
 }

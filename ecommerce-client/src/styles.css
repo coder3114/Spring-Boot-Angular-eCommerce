@@ -135,6 +135,11 @@ a:hover {
   min-height: 100vh;
 }
 
+.fa-user {
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
 aside.menu-sidebar.d-none.d-lg-block.clr {
   background: 0 0;
   z-index: 99999999;
@@ -855,6 +860,13 @@ footer ul li {
   .header-wrap .account-item > .content {
     display: none;
   }
+
+  .web-name {
+    display: none;
+  }
+  .cart-area .total {
+    display: none;
+  }
 }
 
 @media (max-width: 991px) {
@@ -879,6 +891,13 @@ footer ul li {
   .web-name {
     display: none;
   }
+  .cart-area .total {
+    display: none;
+  }
+  .user-login .au-btn-submit {
+    display: none;
+  }
+
   .form-header {
     -webkit-box-pack: center;
     -webkit-justify-content: center;
@@ -887,11 +906,18 @@ footer ul li {
     justify-content: center;
   }
   .au-input-xl {
-    min-width: 350px;
+    min-width: 250px;
+    max-width: 280px;
   }
   .logo {
     text-align: center;
   }
+  /* .ng-star-inserted {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+  } */
 
   .header-desktop {
     position: relative;
@@ -906,7 +932,7 @@ footer ul li {
     -moz-box-orient: vertical;
     -moz-box-direction: normal;
     -ms-flex-direction: column;
-    flex-direction: column;
+    flex-direction: row;
   }
   .header-button {
     margin-top: 30px;
@@ -941,9 +967,9 @@ footer ul li {
   .cart-area i {
     font-size: 22px;
     float: left;
-    margin-top: 16px;
-    color: rgb(39, 165, 98);
-    margin-left: 15px;
+  }
+  .user-login {
+    font-size: 22px;
   }
   .header-wrap2 {
     -webkit-box-pack: justify;
@@ -989,7 +1015,6 @@ footer ul li {
     font-size: 22px;
     float: left;
     margin-top: 16px;
-    color: rgb(39, 165, 98);
     margin-left: 15px;
   }
   .footer-pagination {
@@ -1025,10 +1050,9 @@ footer ul li {
     display: none;
   }
   .cart-area i {
-    font-size: 18px;
+    font-size: 22px;
     float: left;
     margin-top: 16px;
-    color: #03a9f4;
     margin-left: 15px;
   }
   .total span {

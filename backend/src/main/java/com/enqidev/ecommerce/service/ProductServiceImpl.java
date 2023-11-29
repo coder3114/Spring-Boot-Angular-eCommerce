@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.isPresent()) {
             return product.get();
         } else {
-            throw new ResourceNotFoundException("No product found for this id");
+            throw new ResourceNotFoundException("No product found for this id.");
         }
     }
 
@@ -50,22 +50,22 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public Product updateProduct(Product product) {
-        Product existingProduct = productRepository.findById(product.getId()).get();
-        existingProduct.setName(product.getName());
-        Product updatedProduct = productRepository.save(existingProduct);
-        return updatedProduct;
-    }
-
-    @Override
-    public String deleteProduct(Long id) {
-        boolean productExist = productRepository.findById(id).isPresent();
-        if (productExist) {
-            productRepository.deleteById(id);
-            return "Deleted product with " + id;
-        } else {
-            throw new ResourceNotFoundException("No product found, cannot delete.");
-        }
-    }
+//    @Override
+//    public Product updateProduct(Product product) {
+//        Product existingProduct = productRepository.findById(product.getId()).get();
+//        existingProduct.setName(product.getName());
+//        Product updatedProduct = productRepository.save(existingProduct);
+//        return updatedProduct;
+//    }
+//
+//    @Override
+//    public String deleteProduct(Long id) {
+//        boolean productExist = productRepository.findById(id).isPresent();
+//        if (productExist) {
+//            productRepository.deleteById(id);
+//            return "Deleted product with " + id;
+//        } else {
+//            throw new ResourceNotFoundException("No product found, cannot delete.");
+//        }
+//    }
 }

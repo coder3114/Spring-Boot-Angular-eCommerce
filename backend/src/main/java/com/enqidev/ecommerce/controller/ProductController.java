@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -28,7 +28,6 @@ public class ProductController {
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
         Product savedProduct = productService.createProduct(product);
-//        return savedProduct;
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED).getBody();
     }
 
@@ -51,17 +50,17 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
-        return ResponseEntity.ok(productService.updateProduct(productDetails));
-    }
-
-    @DeleteMapping("/products/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(productService.deleteProduct(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping("/products/{id}")
+//    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+//        return ResponseEntity.ok(productService.updateProduct(productDetails));
+//    }
+//
+//    @DeleteMapping("/products/{id}")
+//    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) {
+//        try {
+//            return ResponseEntity.ok(productService.deleteProduct(id));
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 }

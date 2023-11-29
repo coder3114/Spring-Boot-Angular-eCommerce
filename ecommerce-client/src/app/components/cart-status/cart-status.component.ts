@@ -19,7 +19,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CartStatusComponent implements OnDestroy {
   constructor(
     private cartService: CartService,
-    private route: ActivatedRoute,
     public auth: AuthService,
     private sharedService: SharedService,
     public router: Router,
@@ -53,9 +52,7 @@ export class CartStatusComponent implements OnDestroy {
   private subscription: Subscription;
 
   ngOnInit() {
-    this.route.paramMap.subscribe(() => {
-      this.getCartDetail();
-    });
+    this.getCartDetail();
   }
 
   getCartDetail() {
@@ -84,10 +81,12 @@ export class CartStatusComponent implements OnDestroy {
     this.cartService.getCart(userId).subscribe(
       (data: any) => {
         // Update cart information when cart data is received
-        this.totalQuantity = data.length;
+        this.totalQuantity = data.data.length;
 
+        console.log(data.data);
+        // update cart data to read .data after improving the API responseEntity
         // Calculate total price based on the received cart data
-        this.totalPrice = +data
+        this.totalPrice = +data.data
           .reduce((total: number, cartItem: Cart) => {
             return total + cartItem.product.unitPrice;
           }, 0)

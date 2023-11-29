@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-//tells JUnit 5 to use the Mockito extension for test execution so  @InjectMocks @Mock works as expected
 public class ProductServiceImplTest {
     @Mock
     ProductRepository repository;
@@ -50,8 +49,8 @@ public class ProductServiceImplTest {
     @Test
     @DisplayName("should return the new product when a product is created")
     public void testCreateProduct() {
-        
-        final Product saveProduct = new Product("TestProduct");
+
+        final Product saveProduct = TestUtil.getProductList().get(1);
 
         assertEquals(saveProduct, service.createProduct(saveProduct));
 
@@ -62,7 +61,7 @@ public class ProductServiceImplTest {
     @DisplayName("should return the product when its id gets called")
     public void testGetProductById() {
 
-        final Product searchProduct = new Product("TestProduct");
+        final Product searchProduct = TestUtil.getProductList().get(1);
 
         when(repository.findById(searchProduct.getId())).thenReturn(Optional.of(searchProduct));
 
@@ -79,7 +78,7 @@ public class ProductServiceImplTest {
             service.getProductById(null);
         });
 
-        assertEquals("No product found for this id", exception.getMessage());
+        assertEquals("No product found for this id.", exception.getMessage());
     }
 
     @Test

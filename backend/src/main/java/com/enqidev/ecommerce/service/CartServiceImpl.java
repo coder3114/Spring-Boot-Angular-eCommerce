@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
         List<Cart> carts = cartRepository.findByUserId(userId);
 
         if (carts.isEmpty()) {
-            throw new ResourceNotFoundException("No carts found for user with ID " + userId);
+            throw new ResourceNotFoundException("No carts found for user with id: " + userId);
         }
 
         return carts;

@@ -27,6 +27,7 @@ export class ProductPageComponent implements OnInit {
   getProductDetailById(id: number) {
     this.productService.getProductDetailById(id).subscribe((res) => {
       this.productDetail = res;
+      console.log(this.productDetail);
     });
   }
 }

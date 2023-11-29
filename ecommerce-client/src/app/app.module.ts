@@ -46,7 +46,7 @@ const routes: Routes = [
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
+    HttpClientModule, // register the HttpClientModule to provide the HttpClient service
     MatFormFieldModule,
     MatSelectModule,
     FormsModule,
