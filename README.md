@@ -4,6 +4,26 @@ EAT WELL is a simple ecommerce website that brings healthy and yummy food to bus
 
 Note: The backend was developed from scratch within a week, despite having no prior experience with Spring Boot. You can find a detailed account of my learning journey during this process at [Log.md](coder3114/spring-boot-angular-ecommerce/Log.md).
 
+
+
+Table of Contents
+- [Tech Stack](#tech-stack)
+- [User Requirements](#user-requirements)
+- [Demo](#demo)
+- [Project Architecture](#project-architecture)
+- [Backend Architecture](#backend-architecture)
+- [Frontend Structure](#frontend-structure)
+- [Release Plan](#release-plan)
+- [REST API](#rest-api)
+    - [Shopping Cart Operations](#shopping-cart-operations)
+    - [Product Operations](#product-operations)
+    - [Checkout Operation](#checkout-operations)
+- [Testing](#testing)
+- [Roadmap](#roadmap)
+- [Author](#author)
+- [Feedback](#feedback)
+
+
 ## Tech Stack
 
 **Client:** Angular 13, JS ES6, HTML5, CSS3, VS Code
@@ -41,7 +61,7 @@ The Eat Well platform addresses the following user requirements:
 
 ![BE-Architect](images/be-springboot.png)
 
-## Frontend Structure - Angular
+## Frontend Structure
 ![FE-Angular](images/fe-angular.png)
 
 ## Release Plan
@@ -62,7 +82,7 @@ The Eat Well platform addresses the following user requirements:
 
 These APIs provide the necessary endpoints to manage shopping cart operations, handle product information, and process checkouts.
 
-### Shopping Cart Operations:
+### Shopping Cart Operations
 
 Retrieve the current state of the shopping cart: `GET /api/cart`
 
@@ -71,7 +91,7 @@ Add an item to the shopping cart: `POST /api/addToCart/{productId}`
 Remove an item from the shopping cart: `DELETE /api/cart/{productId}`
 
 
-### Product Operations:
+### Product Operations
 
 Retrieve all available products: `GET /api/products`
 
@@ -82,7 +102,7 @@ Add a new product to the product list: `POST /api/products`
 Search for products by keywords: `GET /api/search/{keyword}`
 
 
-### Checkout Operations:
+### Checkout Operations
 
 Initiate the checkout process: `POST /api/checkout`
 
