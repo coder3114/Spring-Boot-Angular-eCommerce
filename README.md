@@ -2,6 +2,7 @@
 
 EAT WELL is a simple ecommerce website that brings healthy and yummy food to busy city elite who value their wellness and convenience.
 
+Note: The backend was developed from scratch within a week, despite having no prior experience with Spring Boot. You can find a detailed account of my learning journey during this process at [Log.md](coder3114/spring-boot-angular-ecommerce/Log.md).
 
 ## Tech Stack
 
@@ -29,16 +30,32 @@ The Eat Well platform addresses the following user requirements:
 - User Login/Logout:
     - Provide secure user authentication for login and logout functionalities.
 
+## Demo
+
+![Eat Well Demo](images/eatwell-demo.gif)
+
+## Project Architecture
+![App-interaction](images/app-interact.png)
+
+## Backend Architecture
+
+![BE-Architect](images/be-springboot.png)
+
+## Frontend Structure - Angular
+![FE-Angular](images/fe-angular.png)
+
 ## Release Plan
 
 - Release 1.0
-    - Show a list of products with a responsive website framework.
+    - Show a list of products with a responsive website framework. Using `GET /api/products` API to fetch products data stored in the MySQL database.
 - Release 2.0
-    - Implement product filtering and searching features.
-    - Allow users to add products to their shopping cart.
+    - Implement product filtering using Angular MUI. Using URLs to read parameters which were then subscribed by product lists for filtering purposes.
+    - Implement searching by keyword features. Using  `GET /api/search/{keyword}` API to fetch the products with keywords.
+    - Allow users to add products to their shopping cart. Using `POST /api/addToCart/{productId}` API with userId in the query param to add a specific product in the user's cart.
 - Release 3.0
-    - Implement user login and logout functionality with security measures.
-    - Integrate shopping cart checkout using Stripe for secure transactions.
+    - Implement user login and logout functionality using Auth0 with security measures.
+    - Allow users to remove products to their shopping cart. Using `DELETE /api/cart/{productId}` API with userId in the query param to delete specific product in the user's cart.
+    - Integrate shopping cart checkout using Stripe for secure transactions with `POST /api/checkout` API.
 
 
 ## REST API
@@ -72,9 +89,24 @@ Initiate the checkout process: `POST /api/checkout`
 
 ## Testing
 
-The Spring Boot backend is tested using a combination of JUnit, Mockito, and MockMvc. The tests cover various layers of the application with a code coverage of over `95%`.
+The Spring Boot backend is tested using a combination of JUnit, Mockito, and MockMvc. The tests cover various layers of the application with a code coverage of over `95%`. High code coverage means most of my code is tested. I aim to cover all edge cases to prevent errors and make the app robust.
 
-![test-coverage](image.png)
+![test-coverage](images/test-coverage.png)
+
+During the development process, I utilized **Postman** to test all the APIs listed above. This not only enhanced the design of the API but also facilitated the construction of responses that are more client-friendly. For instance,
+
+- `GET /api/cart` retrives user's cart successfully 
+    - Query Params: {userId: testUser} (which exists in SQL db)
+    - request url: http://localhost:8080/api/cart?userId=testUser
+ ![Get cart with user successful](images/get-cart-200.png)
+
+
+- `GET /api/cart` retrives the user's cart not successful, returns message, cause, and httpStatus code in the response body
+    - Query Params: {userId: qw} (which does not exist in SQL db)
+    - request url: http://localhost:8080/api/cart?userId=qw 
+![Get cart with user not found](images/get-cart-404.png)
+
+
 
 ## Roadmap
 
@@ -93,3 +125,12 @@ The Spring Boot backend is tested using a combination of JUnit, Mockito, and Moc
     - Dynamically generate line items and payment amounts based on the user's cart at checkout, and return a payment intent object as parameters into the checkout session to the server.
     - Use Webhooks to receive notifications from Stripe when the payment is completed or failed.
     - Increase testing coverage for the checkout service.
+
+
+## Author
+
+- [@coderella](https://github.com/coder3114)
+
+## Feedback
+
+If you have any feedback, please reach out to [qiangie.yang@gmail.com](mailto:qiangie.yang@gmail.com)
