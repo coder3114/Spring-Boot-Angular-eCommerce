@@ -2,8 +2,7 @@
 
 EAT WELL is a simple ecommerce website that brings healthy and yummy food to busy city elite who value their wellness and convenience.
 
-Note: The backend was developed from scratch within a week, despite having no prior experience with Spring Boot. You can find a detailed account of my learning journey during this process at [Log.md](coder3114/spring-boot-angular-ecommerce/Log.md).
-
+Note: The backend was developed from scratch within a week, despite having no prior experience with Spring Boot. You can find a detailed account of my learning journey during this process at [Log.md](https://github.com/coder3114/Spring-Boot-Angular-eCommerce/blob/master/Log.md).
 
 
 Table of Contents
